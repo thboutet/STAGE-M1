@@ -64,7 +64,9 @@ augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromC
 
 ## INSTALL FUNANNOTATE 
 docker pull nextgenusfs/funannotate
+
 wget -O funannotate-docker https://raw.githubusercontent.com/nextgenusfs/funannotate/master/funannotate-docker
+
 chmod +x funannotate-docker
 
 ./funannotate-docker setup -d db/            #Repertory for the funannotate database 
