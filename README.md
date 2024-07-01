@@ -8,15 +8,15 @@ I will use these tools on 5 microsporidia : _Encephalitozoon cuniculi_, _Nosema 
 
 # STEP 1 : CREATE A CONDA ENVIRONMENT :
 
-``curl -O https://repo.anaconda.com/archive/Anaconda3-2024.02-1-Linux-x86_64.sh  ``
-bash ~/Téléchargements/Anaconda3-2024.02-1-Linux-x86_64.sh
+``curl -O https://repo.anaconda.com/archive/Anaconda3-2024.02-1-Linux-x86_64.sh ``  
+``bash ~/Téléchargements/Anaconda3-2024.02-1-Linux-x86_64.sh``  
 
-conda config --add channels defaults  
+``conda config --add channels defaults  
 conda config --add channels bioconda  
-conda config --add channels conda-forge  
+conda config --add channels conda-forge  ``
 
-conda create --name micro  
-conda activate micro
+``conda create --name micro  
+conda activate micro``
 
 # STEP 2 : USED THE TOOLS (EXAMPLE WITH _E.CUNICULI_)
 To use the tools correctly we need a fasta file of the complete genome of microsporidia (found on NCBI)
