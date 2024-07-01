@@ -31,7 +31,8 @@ I also need a data_training file generated via microannot
 conda install glimmer
 
 ## TRAIN GLIMMER 
-build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa	    #Creation of the training data file for cuniculi 
+build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa	   
+=> Creation of the training data file for cuniculi 
 ## RUN GLIMMER (option = codon start : ATG, gene length > 240 nt
 glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimmer/result_E.cuniculi 
 
