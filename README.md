@@ -99,7 +99,7 @@ cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 glimmer/Proteomes_E.cuniculi_glimmer -
 Cluster 2 : unclusterized genes from cluster 1 VS database  
 cd-hit-2d -i glimmer/cluster_prot100_glimmer -i2 Proteomes_E.cuniculi.txt -d 0 -o glimmer/cluster_supprot100_glimmer -c 0.9 
 
-Doing it is two clusters allows me to really find all the genes that need to be clustered 
+Doing this two clusters allows me to really find all the genes that need to be clustered 
 
 ## PRODIGAL
 Cluster 1 : database VS predict genes  
