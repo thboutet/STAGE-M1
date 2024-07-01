@@ -8,8 +8,12 @@ I will use these tools on 5 microsporidia : _Encephalitozoon cuniculi_, _Nosema 
 
 # STEP 1 : CREATE A CONDA ENVIRONMENT :
 
-``curl -O https://repo.anaconda.com/archive/Anaconda3-2024.02-1-Linux-x86_64.sh ``  
-``bash ~/Téléchargements/Anaconda3-2024.02-1-Linux-x86_64.sh``  
+```
+curl -O https://repo.anaconda.com/archive/Anaconda3-2024.02-1-Linux-x86_64.sh
+```  
+```
+bash ~/Téléchargements/Anaconda3-2024.02-1-Linux-x86_64.sh
+```  
 
 ```
 conda config --add channels defaults  
@@ -32,7 +36,9 @@ conda install glimmer
 ```
 
 ## TRAIN GLIMMER 
-``build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa	``   
+```
+build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa  
+```   
 => Creation of the training data file for cuniculi 
 ## RUN GLIMMER (option = codon start : ATG, gene length > 240 nt)
 ```
