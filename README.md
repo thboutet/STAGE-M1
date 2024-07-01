@@ -4,7 +4,7 @@ Use of gene prediction tools for microsporidian genomes
 This github includes all the files/scripts and results generated during my M1 internship at the LMGE.
 The aim of this internship was to try to optimize the Microannot tool by comparing different tools for gene prediction.
 Here we have 4: Glimmer and prodigal which are made for prokaryotic organisms, as well as Augustus and Funannotate which are made for eukaryotic organisms.
-I will use these tools on 5 microsporidia : Encephalitozoon cuniculi, Nosema ceranae, Enterocytozoon bieneusi , Anncaliia algerae and Nematocida parisii
+I will use these tools on 5 microsporidia : Encephalitozoon cuniculi, Nosema ceranae, Enterocytozoon bieneusi , Anncaliia algerae and Nematocida parisii.
 
 ## STEP 1 : CREATE A CONDA ENVIRONMENT :
 
@@ -68,7 +68,7 @@ nano ~/.bashrc
 export FUNANNOTATE_DB=/home/path/to/db
 source ~/.bashrc
 
-# Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes)
+/!\ Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes)
 
 gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cuniculi_augustus.gff > augustus/cuniculi_out.gff3        # Transform the gff from augustus to gff3 so that funannotate can read it 
 
@@ -108,4 +108,21 @@ cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 augustus/Proteomes_E.cuniculi_augustus
 Cluster 2 : unclusterized genes from cluster 1 VS database
 cd-hit-2d -i augustus/cluster_prot100_augustus -i2 Proteomes_E.cuniculi.txt -d 0 -o augustus/cluster_supprot100_augustus -c 0.9 
 
+# FUNANNOTATE
+Cluster 1 : database VS predict genes  
+cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 funannotate/Proteomes_E.cuniculi_funannotate -d 0 -o funannotate/cluster_prot100_funannotate -c 1 -A 1 
+
+Cluster 2 : unclusterized genes from cluster 1 VS database
+cd-hit-2d -i funannotate/cluster_prot100_funannotate -i2 Proteomes_E.cuniculi.txt -d 0 -o funannotate/cluster_supprot100_funannotate -c 0.9 
+
+# STEP 5 : OUTPUT THE RESULTS
+
+To process my results I use the "script_cluster.py"
+This will create "result_microsporidia" files which contain :
+-Pie charts on the predictions of the 4 tools ('Pie')
+-A bar charts that compares the set of genes predicted by the set of tools with those of the initial database
+('Bar/database_VS_4tools_microsporidia.png')
+-An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png')
+-A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia')
+-2 Venn Diagramms : 1 which represents the clustered genes for all tools ('Venn/all_tools_microsporidia.png') , the other which represents clustered and correct genes for all tools ('Correct_genes_microsporidia.png')
 
