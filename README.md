@@ -27,7 +27,9 @@ We also need a data_training file generated via Microannot
 (All these files are given in this github)
 
 ## INSTALL GLIMMER
-``conda install glimmer``
+```
+conda install glimmer
+```
 
 ## TRAIN GLIMMER 
 ``build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa	``   
@@ -42,8 +44,9 @@ Here I use the script "glimmer/Script_gff.py" to get a gff file
 
 
 ## INSTALL PRODIGAL
+```
 conda install prodigal
-
+```
 ## TRAIN A NEW SPECIES
 prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur_e_cuniculi.trn -p single 
 ## RUN PRODIGAL 
