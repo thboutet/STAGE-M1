@@ -3,7 +3,7 @@ Use of gene prediction tools for microsporidian genomes
 
 This github includes all the files/scripts and results generated during my M1 internship at the LMGE.
 The aim of this internship was to try to optimize the Microannot tool by comparing different tools for gene prediction.
-Here we have 4: Glimmer and prodigal which are made for prokaryotic organisms, as well as Augustus and Funannotate which are made for eukaryotic organisms.
+Here we have 4: Glimmer and prodigal for prokaryotic organisms, and Augustus and Funannotate which are made for eukaryotic organisms.
 I will use these tools on 5 microsporidia : Encephalitozoon cuniculi, Nosema ceranae, Enterocytozoon bieneusi , Anncaliia algerae and Nematocida parisii.
 
 # STEP 1 : CREATE A CONDA ENVIRONMENT :
@@ -125,4 +125,7 @@ This will create "result_microsporidia" files which contain :
 -An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png')
 -A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia')
 -2 Venn Diagramms : 1 which represents the clustered genes for all tools ('Venn/all_tools_microsporidia.png') , the other which represents clustered and correct genes for all tools ('Correct_genes_microsporidia.png')
+-The list of genes that are in the database but are never predicted ('unpredicted_genes_microsporidia')
+-The list of genes that are predicted by all tools ('predicted_genes_microsporidia')
+
 
