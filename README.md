@@ -126,13 +126,13 @@ cd-hit-2d -i funannotate/cluster_prot100_funannotate -i2 Proteomes_E.cuniculi.tx
 
 To process my results I use the "script_cluster.py"
 This will create "result_microsporidia" files which contain :  
--Pie charts on the predictions of the 4 tools ('Pie')  
--A bar charts that compares the set of genes predicted by the set of tools with those of the initial database
+- Pie charts on the predictions of the 4 tools ('Pie')  
+- A bar charts that compares the set of genes predicted by the set of tools with those of the initial database
 ('Bar/database_VS_4tools_microsporidia.png')  
--An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png')  
--A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia')  
--2 Venn Diagramms : 1 which represents the clustered genes for all tools  ('Venn/all_tools_microsporidia.png') , the other which represents clustered and correct genes for all tools ('Correct_genes_microsporidia.png')  
--The list of genes that are in the database but are never predicted ('unpredicted_genes_microsporidia')  
--The list of genes that are predicted by all tools ('predicted_genes_microsporidia')  
+- An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png')  
+- A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia')  
+- 2 Venn Diagramms : 1 which represents the clustered genes for all tools  ('Venn/all_tools_microsporidia.png') , the other which represents clustered and correct genes for all tools ('Correct_genes_microsporidia.png')  
+- The list of genes that are in the database but are never predicted ('unpredicted_genes_microsporidia')  
+- The list of genes that are predicted by all tools ('predicted_genes_microsporidia')  
 
 
