@@ -103,7 +103,7 @@ source ~/.bashrc
 > [!WARNING]
 > Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes).
 
-# Transform the gff from augustus to gff3 so that funannotate can read it 
+Transform the gff from augustus to gff3 so that funannotate can read it 
 ```
 gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cuniculi_augustus.gff > augustus/cuniculi_out.gff3       
 ```
