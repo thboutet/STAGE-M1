@@ -13,7 +13,9 @@ curl -O https://repo.anaconda.com/archive/Anaconda3-2024.02-1-Linux-x86_64.sh
 bash ~/Téléchargements/Anaconda3-2024.02-1-Linux-x86_64.sh
 
 conda config --add channels defaults
+
 conda config --add channels bioconda
+
 conda config --add channels conda-forge
 
 conda create --name micro
