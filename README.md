@@ -29,7 +29,7 @@ conda install glimmer
 ## TRAIN GLIMMER 
 build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa	   
 => Creation of the training data file for cuniculi 
-## RUN GLIMMER (option = codon start : ATG, gene length > 240 nt
+## RUN GLIMMER (option = codon start : ATG, gene length > 240 nt)
 glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimmer/result_E.cuniculi 
 
 ## CONVERT TO GFF 
@@ -132,8 +132,13 @@ This will create "result_microsporidia" files which contain :
 ('Bar/database_VS_4tools_microsporidia.png')  
 - An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png')  
 - A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia')  
-- 2 Venn Diagramms : 1 which represents the clustered genes for all tools  ('Venn/all_tools_microsporidia.png') , the other which represents clustered and correct genes for all tools ('Correct_genes_microsporidia.png')  
+- A Venn Diagramms which represents the clustered genes for all tools  ('Venn/all_tools_microsporidia.png') 
 - The list of genes that are in the database but are never predicted ('unpredicted_genes_microsporidia')  
-- The list of genes that are predicted by all tools ('predicted_genes_microsporidia')  
+- The list of genes that are predicted by all tools ('predicted_genes_microsporidia')
+- Csv sheets (one per tool) that will show the different clusters and whether the database genes are predicted correctly, predicted with an error (indication of the type of error), or not predicted. The false positives of the tool will also be indicated. I concatenate these sheets to create a file "MICROSPORIDIA.ods"
+
+ I complete these results using another script: "script_pandas.py" :
+ - An other Venn Diagramm which represents clustered and correct genes for all tools ('Venn/Correct_genes_microsporidia.png')
+ - Two bar charts of errors made in gene prediction,  100% standardized ('Bar/microsporidia100%.png') and number of errors ('Bar/microsporidia.png')
 
 
