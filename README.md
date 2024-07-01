@@ -58,7 +58,8 @@ conda install augustus
 
 ## TRAIN A NEW SPECIES
 autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --trainingset=data_training_prot_cuniculi  
-=> /!\ The data_training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
+> [!WARNING]
+> The data_training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
 ## RUN AUGUSTUS 
 augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromCDS=False --predictionStart=ATG genome_complet/E_cuniculi.fna > augustus/result_E.cuniculi_augustus.gff
 
