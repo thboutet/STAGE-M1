@@ -47,6 +47,7 @@ conda install prodigal
 prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur_e_cuniculi.trn -p single 
 ## RUN PRODIGAL 
 prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cuniculi.trn -f gff > prodigal/result_E.cuniculi
+
 => Prodigal does not allow to choose the size of the genes so I will treat the results later.
 
 
