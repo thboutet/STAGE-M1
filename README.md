@@ -44,7 +44,8 @@ prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur
 ## RUN PRODIGAL 
 prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cuniculi.trn -f gff > prodigal/result_E.cuniculi
 
-=> Prodigal does not allow to choose the size of the genes so I will treat the results later.
+> [!IMPORTANT]
+> Prodigal does not allow to choose the size of the genes so I will treat the results later with "script_genes.py".
 
 
 ## INSTALL AUGUSTUS 
@@ -99,7 +100,7 @@ Cluster 2 : unclusterized genes from cluster 1 VS database
 cd-hit-2d -i glimmer/cluster_prot100_glimmer -i2 Proteomes_E.cuniculi.txt -d 0 -o glimmer/cluster_supprot100_glimmer -c 0.9 
 
 > [!NOTE]
-> Doing this two clusters allows me to really find all the genes that need to be clustered 
+> Doing this two clusters allows to really find all the genes that need to be clustered 
 
 ## PRODIGAL
 Cluster 1 : database VS predict genes  
