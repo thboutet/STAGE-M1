@@ -54,40 +54,52 @@ Here I use the script "glimmer/Script_gff.py" to get a gff file
 conda install prodigal
 ```
 ## TRAIN A NEW SPECIES
+```
 prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur_e_cuniculi.trn -p single 
+```
 ## RUN PRODIGAL 
+```
 prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cuniculi.trn -f gff > prodigal/result_E.cuniculi
-
+```
 > [!IMPORTANT]
 > Prodigal does not allow to choose the size of the genes so I will treat the results later with "script_genes.py".
 
 
 ## INSTALL AUGUSTUS 
+```
 conda install augustus  
+```
 > [!WARNING]
 > Here you may have problems with "scipio.py", so you will also have to download this script and put it in the directory indicated by the error returned by augustus
 
 ## TRAIN A NEW SPECIES
-autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --trainingset=data_training_prot_cuniculi  
+```
+autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --
+trainingset=data_training_prot_cuniculi  
+```
 > [!NOTE]
 > The data_training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
 ## RUN AUGUSTUS 
+```
 augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromCDS=False --predictionStart=ATG genome_complet/E_cuniculi.fna > augustus/result_E.cuniculi_augustus.gff
-
+```
 
 ## INSTALL FUNANNOTATE 
+```
 docker pull nextgenusfs/funannotate
 
 wget -O funannotate-docker https://raw.githubusercontent.com/nextgenusfs/funannotate/master/funannotate-docker
 
 chmod +x funannotate-docker
-
+```
+```
 ./funannotate-docker setup -d db/            #Repertory for the funannotate database 
-
+```
+```
 nano ~/.bashrc  
 export FUNANNOTATE_DB=/home/path/to/db
 source ~/.bashrc
-
+```
 > [!WARNING]
 > Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes).
 
