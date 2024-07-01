@@ -4,7 +4,7 @@ Use of gene prediction tools for microsporidian genomes
 This github includes all the files/scripts and results generated during my M1 internship at the LMGE.
 The aim of this internship was to try to optimize the Microannot tool by comparing different tools for gene prediction.
 Here we have 4: Glimmer and prodigal for prokaryotic organisms, and Augustus and Funannotate which are made for eukaryotic organisms.
-I will use these tools on 5 microsporidia : Encephalitozoon cuniculi, Nosema ceranae, Enterocytozoon bieneusi , Anncaliia algerae and Nematocida parisii.
+I will use these tools on 5 microsporidia : _Encephalitozoon cuniculi_, _Nosema ceranae_, _Enterocytozoon bieneusi_ , _Anncaliia algerae_ and _Nematocida parisii_.
 
 # STEP 1 : CREATE A CONDA ENVIRONMENT :
 
@@ -18,7 +18,7 @@ conda config --add channels conda-forge
 conda create --name micro  
 conda activate micro
 
-# STEP 2 : USED THE TOOLS (EXAMPLE WITH E.CUNICULI)
+# STEP 2 : USED THE TOOLS (EXAMPLE WITH _E.CUNICULI_)
 To use the tools correctly we need a fasta file of the complete genome of microsporidia (found on NCBI)
 We also need a data_training file generated via Microannot
 (All these files are given in this github)
@@ -86,7 +86,7 @@ gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cunicul
 
 For this step I use the script_gene.py which will allow me to generate 2 files: 1 containing the CDS in nucleotide with a name of this style"microsporidia_CDS_tools" and the CDS in aa "Proteomes_microsporidia_tools"
 
-# STEP 4 : CLUSTER (EXAMPLE FOR E.CUNICULI)
+# STEP 4 : CLUSTER (EXAMPLE FOR _E.CUNICULI_)
 In this step I will make two clusters to see if the genes predicted by my tools correspond to the genes of the initial database
 
 ## CD-HIT
