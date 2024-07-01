@@ -74,7 +74,7 @@ export FUNANNOTATE_DB=/home/path/to/db
 source ~/.bashrc
 
 > [!WARNING]
-> sFunannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes)
+> Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes).
 
 gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cuniculi_augustus.gff > augustus/cuniculi_out.gff3        # Transform the gff from augustus to gff3 so that funannotate can read it 
 
@@ -98,7 +98,8 @@ cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 glimmer/Proteomes_E.cuniculi_glimmer -
 Cluster 2 : unclusterized genes from cluster 1 VS database  
 cd-hit-2d -i glimmer/cluster_prot100_glimmer -i2 Proteomes_E.cuniculi.txt -d 0 -o glimmer/cluster_supprot100_glimmer -c 0.9 
 
-Doing this two clusters allows me to really find all the genes that need to be clustered 
+> [!NOTE]
+> Doing this two clusters allows me to really find all the genes that need to be clustered 
 
 ## PRODIGAL
 Cluster 1 : database VS predict genes  
