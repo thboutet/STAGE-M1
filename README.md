@@ -52,8 +52,9 @@ prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cunicul
 
 
 ## INSTALL AUGUSTUS 
-conda install augustus
-/!\ Here you may have problems with "scipio.py", so you will also have to download this script and put it in the directory indicated by the error returned by augustus
+conda install augustus  
+> [!WARNING]
+> Here you may have problems with "scipio.py", so you will also have to download this script and put it in the directory indicated by the error returned by augustus
 
 ## TRAIN A NEW SPECIES
 autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --trainingset=data_training_prot_cuniculi  
