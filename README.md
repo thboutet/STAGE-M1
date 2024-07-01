@@ -102,12 +102,13 @@ source ~/.bashrc
 ```
 > [!WARNING]
 > Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes).
-
+```
 gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cuniculi_augustus.gff > augustus/cuniculi_out.gff3        # Transform the gff from augustus to gff3 so that funannotate can read it 
-
+```
 ## RUN FUNANNOTATE
+```
 ./funannotate-docker predict -i genome_complet/E_cuniculi.fna -o funannotate -s "E.cuniculi" --augustus_gff augustus/cuniculi_out.gff3 --max_intronlen 0 --cpus 8
-
+```
 # STEP 3: Obtain the files containing the CDS predicted by each tool for each microsporidia
 
 For this step I use the script_gene.py which will allow me to generate 2 files: 1 containing the CDS in nucleotide with a name of this style"microsporidia_CDS_tools" and the CDS in aa "Proteomes_microsporidia_tools"
@@ -116,39 +117,48 @@ For this step I use the script_gene.py which will allow me to generate 2 files: 
 In this step I will make two clusters to see if the genes predicted by my tools correspond to the genes of the initial database
 
 ## CD-HIT
+```
 conda install cd-hit
-
+```
 ## GLIMMER 
 Cluster 1 : database VS predict genes  
+```
 cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 glimmer/Proteomes_E.cuniculi_glimmer -d 0 -o glimmer/cluster_prot100_glimmer -c 1 -A 1 
- 
+```
 Cluster 2 : unclusterized genes from cluster 1 VS database  
+```
 cd-hit-2d -i glimmer/cluster_prot100_glimmer -i2 Proteomes_E.cuniculi.txt -d 0 -o glimmer/cluster_supprot100_glimmer -c 0.9 
-
+```
 > [!NOTE]
 > Doing this two clusters allows to really find all the genes that need to be clustered 
 
 ## PRODIGAL
 Cluster 1 : database VS predict genes  
+```
 cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 prodigal/Proteomes_E.cuniculi_prodigal -d 0 -o prodigal/cluster_prot100_prodigal -c 1 -A 1 
-
+```
 Cluster 2 : unclusterized genes from cluster 1 VS database  
+```
 cd-hit-2d -i prodigal/cluster_prot100_prodigal -i2 Proteomes_E.cuniculi.txt -d 0 -o glimmer/cluster_supprot100_prodigal -c 0.9 
-
+```
 ## AUGUSTUS
 Cluster 1 : database VS predict genes  
+```
 cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 augustus/Proteomes_E.cuniculi_augustus -d 0 -o augustus/cluster_prot100_augustus -c 1 -A 1 
-
+```
 Cluster 2 : unclusterized genes from cluster 1 VS database  
+```
 cd-hit-2d -i augustus/cluster_prot100_augustus -i2 Proteomes_E.cuniculi.txt -d 0 -o augustus/cluster_supprot100_augustus -c 0.9 
-
+```
 ## FUNANNOTATE
 Cluster 1 : database VS predict genes  
+```
 cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 funannotate/Proteomes_E.cuniculi_funannotate -d 0 -o funannotate/cluster_prot100_funannotate -c 1 -A 1 
-
+```
 Cluster 2 : unclusterized genes from cluster 1 VS database  
+```
 cd-hit-2d -i funannotate/cluster_prot100_funannotate -i2 Proteomes_E.cuniculi.txt -d 0 -o funannotate/cluster_supprot100_funannotate -c 0.9 
-
+```
 # STEP 5 : OUTPUT THE RESULTS
 
 To process my results I use the "script_cluster.py"
