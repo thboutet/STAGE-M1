@@ -51,8 +51,8 @@ def bar (path, microsporidie) :
 	plt.figure(figsize=(20,6))
 
 	#Je souhaite une figure avec des données normalisées sur 100 %
-	total_aug = occ_augustus.sum()
-	percent_aug = occ_augustus/total_aug *100
+	total_aug = occ_augustus.sum()			#Somme totale de tout les types d'erreurs
+	percent_aug = occ_augustus/total_aug *100	#Calcul du pourcentage de chaque type d'erreur
 	
 	total_fun = occ_funannotate.sum()
 	percent_fun = occ_funannotate/total_fun *100
@@ -64,16 +64,16 @@ def bar (path, microsporidie) :
 	percent_prod = occ_prodigal/total_prod *100
 
 	##Je fais ma figure normalisé sur 100 %
-	x=['Augustus', 'Funannotate', 'Glimmer', 'Prodigal']
-	y1=np.array([percent_aug.tolist()[0], percent_fun.tolist()[0], percent_glim.tolist()[0], percent_prod.tolist()[0]])			#Erreur indeterminé
-	y2=np.array([percent_aug.tolist()[1],percent_fun.tolist()[1],percent_glim.tolist()[1],percent_prod.tolist()[1]])			#Erreur end
-	y3=np.array([percent_aug.tolist()[2],percent_fun.tolist()[2],percent_glim.tolist()[2],percent_prod.tolist()[2]])			#Erreur start
+	x=['Augustus', 'Funannotate', 'Glimmer', 'Prodigal']									#Nom des bars 
+	y1=np.array([percent_aug.tolist()[0], percent_fun.tolist()[0], percent_glim.tolist()[0], percent_prod.tolist()[0]])	#Erreur indeterminé
+	y2=np.array([percent_aug.tolist()[1],percent_fun.tolist()[1],percent_glim.tolist()[1],percent_prod.tolist()[1]])	#Erreur end
+	y3=np.array([percent_aug.tolist()[2],percent_fun.tolist()[2],percent_glim.tolist()[2],percent_prod.tolist()[2]])	#Erreur start
 	
 	fig, ax = plt.subplots()
 	
-	ax.bar(x, y1, color='#CC0000', edgecolor = "black", linewidth = 1)				#Pourcentage d'erreur non spécifier ( en rouge, avec des contours noirs)
+	ax.bar(x, y1, color='#CC0000', edgecolor = "black", linewidth = 1)			#Pourcentage d'erreur non spécifier ( en rouge, avec des contours noirs)
 	ax.bar(x, y2, bottom=y1, color='#007FFF', edgecolor = "black", linewidth = 1)		#Pourcentage d'erreur end (en bleu, avec des contours noirs)
-	ax.bar(x, y3, bottom=y1+y2, color='#FCDC12', edgecolor = "black", linewidth = 1)		#Pourcentage d'erreur start (en jaune, avec des contours noirs)
+	ax.bar(x, y3, bottom=y1+y2, color='#FCDC12', edgecolor = "black", linewidth = 1)	#Pourcentage d'erreur start (en jaune, avec des contours noirs)
 	
 	#Print les pourcentages 
 	for bar in ax.patches :
@@ -82,7 +82,7 @@ def bar (path, microsporidie) :
 	
 	plt.ylabel("error (%)")
 	plt.legend(["Other", "End error", "Start error"])	#Nom des légendes
-	plt.suptitle("Percentage of errors for each tool , "+microsporidie, fontweight='bold')						#Titre (en gras)
+	plt.suptitle("Percentage of errors for each tool , "+microsporidie, fontweight='bold')		#Titre (en gras)
 	plt.title("(standartized out of 100 %)")		#Sous titre pour spécifier le format des données 
 
 	
@@ -95,9 +95,9 @@ def bar (path, microsporidie) :
 	##Je fais une deuxième figure avec les valeurs de bases 
 	plt.figure(figsize=(8,6))
 	x_=['Augustus', 'Funannotate', 'Glimmer', 'Prodigal']
-	y_1=np.array([occ_augustus.tolist()[0], occ_funannotate.tolist()[0], occ_glimmer.tolist()[0], occ_prodigal.tolist()[0]])			#Erreur indeterminé
+	y_1=np.array([occ_augustus.tolist()[0], occ_funannotate.tolist()[0], occ_glimmer.tolist()[0], occ_prodigal.tolist()[0]])		#Erreur indeterminé
 	y_2=np.array([occ_augustus.tolist()[1],occ_funannotate.tolist()[1],occ_glimmer.tolist()[1],occ_prodigal.tolist()[1]])			#Erreur end
-	y_3=np.array([occ_augustus.tolist()[2],occ_funannotate.tolist()[2],occ_glimmer.tolist()[2],occ_prodigal.tolist()[2]])	
+	y_3=np.array([occ_augustus.tolist()[2],occ_funannotate.tolist()[2],occ_glimmer.tolist()[2],occ_prodigal.tolist()[2]])			#Erreur start
 	fig, ax = plt.subplots()
 	
 	ax.bar(x_, y_1, color='#CC0000', edgecolor = "black", linewidth = 1)				#Pourcentage d'erreur non spécifier
@@ -116,9 +116,9 @@ def bar (path, microsporidie) :
 	for i, total in enumerate (total_values):
 		ax.text(i, total + 0.5, round(total), ha = 'center', weight = 'bold', color = 'black')
 	
-	plt.ylabel("Number of errors")
+	plt.ylabel("Number of errors")				#Nom axe y
 	plt.legend(["Other", "End error", "Start error"])	#Nom des légendes
-	plt.title("Number of errors for each tool , "+ microsporidie, fontweight='bold')
+	plt.title("Number of errors for each tool , "+ microsporidie, fontweight='bold')	#Titre
 	
 	#Enregistrer la figure 
 	plt.savefig("result_"+microsporidie+"/Bar/"+microsporidie+".png")
