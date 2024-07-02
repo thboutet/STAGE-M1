@@ -124,6 +124,7 @@ For this step I use the script_gene.py which will allow me to generate 2 files: 
 <details>
 <summary> Voir script_gene.py </summary>
 ```python   
+
 from collections import defaultdict
 
 
