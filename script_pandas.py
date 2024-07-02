@@ -24,7 +24,7 @@ def error (df) :
 	elif ' error ' in df :
 		return ('error')	
 	else :	
-		return None			#None car ici je veux seulement compter et garder mes types d'erreur
+		return None			#None car ici je veux seulement compter et garder mes types d'erreurs
 	
 #Fonction pour récupérer les données de chaques feuilles pour le graphiques bar
 def bar (path, microsporidie) :
