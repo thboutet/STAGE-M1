@@ -6,7 +6,7 @@ Here we have 4: Glimmer and prodigal for prokaryotic organisms, and Augustus and
 I will use these tools on 5 microsporidia : _Encephalitozoon cuniculi_, _Nosema ceranae_, _Enterocytozoon bieneusi_ , _Anncaliia algerae_ and _Nematocida parisii_.
 
 >[!WARNING]
->Funannotate did not work for _Anncaliia algerae_ which means I could not generate all the charts for it. You can still find in its result directory the pie charts for Glimmer, Prodigal and Augustus 
+>Funannotate did not work for _Anncaliia algerae_ which means I could not generate all the charts for it. You can still find in its result directory the pie charts for Glimmer, Prodigal and Augustus. 
 
 # STEP 1 : CREATE A CONDA ENVIRONMENT :
 
@@ -179,6 +179,7 @@ cd-hit-2d -i funannotate/cluster_prot100_funannotate -i2 Proteomes_E.cuniculi.tx
 # STEP 5 : OUTPUT THE RESULTS
 
 To process my results I use the "script_cluster.py"
+You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_cluster.py).
 This will create "result_microsporidia" files which contain :  
 - Pie charts on the predictions of the 4 tools ('Pie') :
 <p align="center">
