@@ -72,8 +72,8 @@ conda install augustus
 > Here you may have problems with "scipio.py", so you will also have to download this script and put it in the directory indicated by the error returned by augustus.
 
 ## TRAIN A NEW SPECIES
-> [!NOTE]
-> To train augustus, we must create a new species. For this we need the genome and the proteins predicted for it. For cuniculi, the data training contains proteins from the other microsporidia annotated on Microannot  _Nosema ceranae_, _Enterocytozoon bieneusi_ and _Anncaliia algerae_). It will therefore be worth creating a genome corresponding to all these proteins.
+
+To train augustus, we must create a new species. For this we need the genome and the proteins predicted for it. For cuniculi, the data training contains proteins from the other microsporidia annotated on Microannot  _Nosema ceranae_, _Enterocytozoon bieneusi_ and _Anncaliia algerae_). It will therefore be worth creating a genome corresponding to all these proteins.
 ```
 cat genome_complet/A_algerae.fna genome_complet/E_bieneusi.fna genome_complet/N_ceranae.fna > genome_complet/all_genome_clear_cuniculi
 ```
