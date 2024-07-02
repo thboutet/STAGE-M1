@@ -84,7 +84,8 @@ prot_bieneusi= open("data_training_prot_bieneusi", 'w')
 for id, seq in dico_aa_bieneusi.items():
 	print(f">{id}", file = prot_bieneusi)		
 	for i in range(0, len(seq), 60):		
-		print(seq[i:i+60], file = prot_bieneusi)		
+		print(seq[i:i+60], file = prot_bieneusi)	
+		
 		
 #POUR CERANAE	
 prot_ceranae= open("data_training_prot_ceranae", 'w')
@@ -93,8 +94,7 @@ for id, seq in dico_aa_ceranae.items():
 	print(f">{id}", file = prot_ceranae)		
 	for i in range(0, len(seq), 60):		
 		print(seq[i:i+60], file = prot_ceranae)
-
-
+		
 
 #POUR PARISII	
 prot_parisii = open("data_training_prot_parisii", 'w')
