@@ -130,6 +130,7 @@ You can find the script [here]
 In this step I will make two clusters to see if the genes predicted by my tools correspond to the genes of the initial database
 
 ## 4.1 CD-HIT
+We use here cd-hit which is a clusterization tool 
 ```
 conda install cd-hit
 ```
