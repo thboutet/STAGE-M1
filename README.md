@@ -173,12 +173,13 @@ cd-hit-2d -i funannotate/cluster_prot100_funannotate -i2 Proteomes_E.cuniculi.tx
 To process my results I use the "script_cluster.py"
 This will create "result_microsporidia" files which contain :  
 - Pie charts on the predictions of the 4 tools ('Pie')
-![Combined_pies](https://github.com/thboutet/STAGE-M1/assets/174331140/d52dd62d-f00e-4656-b5f8-d34f76cb15ae)
-
+<p align="center">
+<img src="https://github.com/thboutet/STAGE-M1/assets/174331140/d52dd62d-f00e-4656-b5f8-d34f76cb15ae" width=125% height=125%>
+</p>
 
 - A bar charts that compares the set of genes predicted by the set of tools with those of the initial database ('Bar/database_VS_4tools_microsporidia.png')
 <p align="center">
-<img srchttps://github.com/thboutet/STAGE-M1/assets/174331140/8343457f-0623-4c43-a3f3-1dd5052ef98e">
+<img src="https://github.com/thboutet/STAGE-M1/assets/174331140/8343457f-0623-4c43-a3f3-1dd5052ef98e">
 </p>
  
 - An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png')
