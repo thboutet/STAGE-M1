@@ -123,7 +123,7 @@ For this step I use the script_gene.py which will allow me to generate 2 files: 
 
 <details>
 <summary> Voir script_gene.py </summary>
-```python 
+```python   
 from collections import defaultdict
 
 
@@ -891,7 +891,7 @@ for chromosome, gene_data in dict_funannotate_parisii.items() :			#Pour chaque g
 			for i in range(0, len(gene_seq), 60):		
 				print(gene_seq[i:i+60], file = funannotate_parisii)	
 													
-```
+</details>
 
 # STEP 4 : CLUSTER (EXAMPLE FOR _E.CUNICULI_)
 In this step I will make two clusters to see if the genes predicted by my tools correspond to the genes of the initial database
