@@ -206,7 +206,7 @@ This will create "result_microsporidia" files which contain :
 - The list of genes that are predicted by all tools ('predicted_genes_microsporidia')  
 - Csv sheets (one per tool) that will show the different clusters and whether the database genes are predicted correctly, predicted with an error (indication of the type of error), or not predicted. The false positives of the tool will also be indicated. I concatenate these sheets to create a file "MICROSPORIDIA.ods"
 
-**I complete these results using another script: "script_pandas.py" :**
+**I complete these results using another script: "script_pandas.py" :**  
 **You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_pandas.py).**
 
  - An other Venn Diagramm which represents clustered and correct genes for all tools ('Venn/Correct_genes_microsporidia.png') :
