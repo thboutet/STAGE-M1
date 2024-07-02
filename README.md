@@ -178,12 +178,12 @@ This will create "result_microsporidia" files which contain :
 
 - A bar charts that compares the set of genes predicted by the set of tools with those of the initial database ('Bar/database_VS_4tools_microsporidia.png')
 <p align="center">
-![database_VS_4tools_cuniculi](https://github.com/thboutet/STAGE-M1/assets/174331140/8343457f-0623-4c43-a3f3-1dd5052ef98e)
+<img srchttps://github.com/thboutet/STAGE-M1/assets/174331140/8343457f-0623-4c43-a3f3-1dd5052ef98e">
 </p>
  
 - An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png')
 <p align="center">
-![prediction_cuniculi](https://github.com/thboutet/STAGE-M1/assets/174331140/a71a0236-d149-462a-9d89-75a48219493e)
+<img src="https://github.com/thboutet/STAGE-M1/assets/174331140/a71a0236-d149-462a-9d89-75a48219493e">
 </p>
 
 - A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia')
