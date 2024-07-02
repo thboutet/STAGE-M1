@@ -16,7 +16,6 @@ import matplotlib.pyplot as plt      		#Pour graphique (pie)
 import matplotlib.image as mpimg
 from PIL import Image 				#Pour traiter des images 
 import numpy as np
-from matplotlib_venn import venn2		#Pour diagramme de Venn
 import matplotlib.patches as patches
 from matplotlib.patches import Patch
 from venny4py.venny4py import *			#Diagramme de Venn pour comparer les 4 outils 
