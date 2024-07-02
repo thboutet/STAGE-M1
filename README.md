@@ -83,7 +83,7 @@ autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_gen
 trainingset=data_training_prot_cuniculi  
 ```
 > [!NOTE]
-> The data_training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
+> The data training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_aa.py).
 ## RUN AUGUSTUS 
 ```
