@@ -25,8 +25,9 @@ def error (df) :
 	else :	
 		return None			#None car ici je veux seulement compter et garder mes types d'erreur
 	
-#Fonction pour récupérer les données pour le graphiques bar
+#Fonction pour récupérer les données de chaques feuilles pour le graphiques bar
 def bar (path, microsporidie) :
+	#Création des différents df (1 par outil)
 	df1 = pd.read_excel(path, sheet_name='augustus')
 	df2 = pd.read_excel(path, sheet_name='funannotate')
 	df3 = pd.read_excel(path, sheet_name='glimmer')
@@ -45,7 +46,6 @@ def bar (path, microsporidie) :
 	occ_glimmer = df3['normalized_error'].dropna().value_counts().sort_index()
 	occ_prodigal = df4['normalized_error'].dropna().value_counts().sort_index()
 
-	
 	
 	#Faire les figures bars 
 	plt.figure(figsize=(20,6))
@@ -124,22 +124,21 @@ def bar (path, microsporidie) :
 	plt.savefig("result_"+microsporidie+"/Bar/"+microsporidie+".png")
 	plt.close()
 	
-##Faire les graphiques bar pour les différentes espèces 
+##Faire les graphiques bar pour les différentes espèces (enlever le # de la microsporidie souhaité)
 #bar('result_cuniculi/CUNICULI.ods', 'cuniculi')
 #bar('result_bieneusi/BIENEUSI.ods', 'bieneusi')
 #bar('result_ceranae/CERANAE.ods', 'ceranae')
 #bar('result_parisii/PARISII.ods', 'parisii')
 
 def venn (path, microsporidie):
-
+	#Création des différents df (1 par outil)
 	df1 = pd.read_excel(path, sheet_name='augustus')
 	df2 = pd.read_excel(path, sheet_name='funannotate')
 	df3 = pd.read_excel(path, sheet_name='glimmer')
 	df4 = pd.read_excel(path, sheet_name='prodigal')
 	
 	
-	
-#Garder seulement les lignes des gènes prédits correctements (Colonne error = OK)	
+	#Garder seulement les lignes des gènes prédits correctements (Colonne error = OK)	
 	df1 = df1[df1[df1.columns[2]] == ' OK']			#Je conserve dans mon df seulement les lignes qui ont "OK" pour la colonnes 3 qui est celle des erreurs					
 	df2 = df2[df2[df2.columns[2]] == ' OK']	
 	df3 = df3[df3[df3.columns[2]] == ' OK']	
@@ -152,12 +151,14 @@ def venn (path, microsporidie):
 	liste_prod = df4[df4.columns[0]].tolist()
 
 
-	#Je mets définis mes sets pour tous mes outils 
+	#Je attribue les listes des gènes correctement prédits à mes outils et je les transforme en set  
 	sets = {'Augustus': set(liste_aug),
 		'Funannotate' : set(liste_fun),
 		'Glimmer': set(liste_gli),
 		'Prodigal': set(liste_prod)}
-	venny4py(sets=sets)
+	
+	#Création des diagramme de Venn
+	venny4py(sets=sets)		
 	
 	#Titre
 	plt.title("Correctly predicted genes for "+microsporidie, fontweight='bold')
@@ -166,7 +167,7 @@ def venn (path, microsporidie):
 	plt.savefig("result_"+microsporidie+"/Venn/Correct_genes_"+microsporidie+".png")
 	plt.close()
 
-##Print les graohiques pour les microsporidie
+##Print les graphiques pour les microsporidie 
 #venn('result_cuniculi/CUNICULI.ods', "cuniculi")
 #venn('result_bieneusi/BIENEUSI.ods', "bieneusi")
 #venn('result_ceranae/CERANAE.ods', "ceranae")
