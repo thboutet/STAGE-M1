@@ -46,7 +46,7 @@ glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimme
 ```
 
 ## CONVERT TO GFF 
-Here I use the script "glimmer/Script_gff.py" to get a gff file 
+Here I use the script "glimmer/Script_gff.py" on the output ('glimmer/result_E.cuniculi.predict') to get a gff file 
 
 
 ## INSTALL PRODIGAL
