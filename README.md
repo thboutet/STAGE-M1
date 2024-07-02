@@ -194,8 +194,9 @@ file:///home/thomas/Stage/Database/result_cuniculi/Histogram/cuniculi.png
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/34d0d604-6741-4f2d-8623-0aa54d0482ec" width=75% height=75%>
 </p>
-- The list of genes that are in the database but are never predicted ('unpredicted_genes_microsporidia')
-- The list of genes that are predicted by all tools ('predicted_genes_microsporidia')
+
+- The list of genes that are in the database but are never predicted ('unpredicted_genes_microsporidia')  
+- The list of genes that are predicted by all tools ('predicted_genes_microsporidia')  
 - Csv sheets (one per tool) that will show the different clusters and whether the database genes are predicted correctly, predicted with an error (indication of the type of error), or not predicted. The false positives of the tool will also be indicated. I concatenate these sheets to create a file "MICROSPORIDIA.ods"
 
  I complete these results using another script: "script_pandas.py" :
