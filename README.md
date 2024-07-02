@@ -5,6 +5,9 @@ The aim of this internship was to try to optimize the Microannot tool by compari
 Here we have 4: Glimmer and prodigal for prokaryotic organisms, and Augustus and Funannotate which are made for eukaryotic organisms.
 I will use these tools on 5 microsporidia : _Encephalitozoon cuniculi_, _Nosema ceranae_, _Enterocytozoon bieneusi_ , _Anncaliia algerae_ and _Nematocida parisii_.
 
+>[!WARNING]
+>Funannotate did not work for _Anncaliia algerae_ which means I could not generate all the charts for it. You can still find in its result directory the pie charts for Glimmer, Prodigal and Augustus 
+
 # STEP 1 : CREATE A CONDA ENVIRONMENT :
 
 ```
