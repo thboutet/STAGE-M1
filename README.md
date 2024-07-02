@@ -121,7 +121,9 @@ gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cunicul
 
 For this step I use the script_gene.py which will allow me to generate 2 files: 1 containing the CDS in nucleotide with a name of this style"microsporidia_CDS_tools" and the CDS in aa "Proteomes_microsporidia_tools"
 
-```python
+<details>
+<summary> Voir script_gene.py </summary>
+```python 
 from collections import defaultdict
 
 
@@ -861,7 +863,6 @@ for chromosome, gene_data in dict_augustus_parisii.items() :			#Pour chaque gene
 				print(gene_seq[i:i+60], file = augustus_parisii)
 					
 ##FUNANNOTATE
-
 for chromosome, gene_data in dict_funannotate_parisii.items() :			#Pour chaque gene prédit
 	if chromosome in dict_genome_parisii :    				#Utiliser les bons chromosomes 
 		chromosome_seq = dict_genome_parisii[chromosome]		#Je récupère la sequence de chaque chromosome
@@ -889,8 +890,7 @@ for chromosome, gene_data in dict_funannotate_parisii.items() :			#Pour chaque g
 			print(f">{chromosome[:-2]}:{start}-{stop}({brin})", file = funannotate_parisii)
 			for i in range(0, len(gene_seq), 60):		
 				print(gene_seq[i:i+60], file = funannotate_parisii)	
-			
-												
+													
 ```
 
 # STEP 4 : CLUSTER (EXAMPLE FOR _E.CUNICULI_)
