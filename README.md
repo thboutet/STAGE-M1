@@ -1,5 +1,5 @@
 # STAGE-M1
-Use of gene prediction tools for microsporidian genomes
+# Use of gene prediction tools for microsporidian genomes
 
 This github includes all the files/scripts and results generated during my M1 internship at the LMGE.
 The aim of this internship was to try to optimize the Microannot tool by comparing different tools for gene prediction.
