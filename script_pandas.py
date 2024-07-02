@@ -1,4 +1,4 @@
-#Package nécessaire à installer
+#Packages nécessaire à installer
 """
 pip install pandas
 pip install matplotlib
@@ -16,6 +16,7 @@ from venny4py.venny4py import *		#Diagramme de Venn
 
 #Je définis d'abord une fonction pour me permettre de bien compter mes différentes erreur (car sinon elles sont 'unique' et ici je veux regrouper les erreurs starts entre elles, end entre elles...)
 def error (df) :
+	#Trois types d'erreurs possibles : 
 	if ' error - start' in df :
 		return ('error - start')
 	elif ' error - end' in df :
