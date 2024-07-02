@@ -1,3 +1,14 @@
+#Script pour traiter les résultats obtenu via les clusters
+
+#Packages à importer
+"""
+pip install matplotlib
+pip install PIL
+pip install numpy
+pip install venny4py
+pip install intel-openmp
+"""
+
 from collections import defaultdict 
 import re
 import sys
@@ -11,7 +22,6 @@ from matplotlib.patches import Patch
 from venny4py.venny4py import *			#Diagramme de Venn pour comparer les 4 outils 
 
 #Fonction qui récupère les séquences de gènes prédites par les outils d'analyse qui ne corresponde pas à celles de microannot : 
-
 def gene_predict (fichier) :
 	dico = defaultdict(str)
 	with open (fichier, 'r') as f1 :
@@ -25,7 +35,6 @@ def gene_predict (fichier) :
 	return dico 
 	
 
-
 print()
 print("===========================POUR CUNICULI==============================")
 print("Nombre total de gènes prédits par l'outil")
@@ -36,18 +45,11 @@ print("Prodigal :", len(gene_predict('prodigal/Proteomes_E.cuniculi_prodigal')))
 print()
 
 
-##Dico des bases de données clean de microannot
-dico_cuniculi = gene_predict('Proteomes_E.cuniculi.txt')
-
 ##Dico des gènes prédits juste par l'outil
 funannotate_cuniculi = gene_predict('funannotate/cluster_prot100_funannotate')
 glimmer_cuniculi = gene_predict('glimmer/cluster_prot100_glimmer')
 augustus_cuniculi = gene_predict('augustus/cluster_prot100_augustus')
 prodigal_cuniculi = gene_predict('prodigal/cluster_prot100_prodigal')
-
-#Fonction qui vérifie que les gènes qui n'ont pas été clusterisé sont bien absent :
-
-
 
 #Fonction qui parse les fichiers de cluster de cd-hit, création de dico à partir des fichiers de clustering 
 def parse_cdhit (fichier) :
@@ -58,12 +60,11 @@ def parse_cdhit (fichier) :
 			if lig.startswith('>') :
 				cluster = lig[1:]
 			else :
-				dico[cluster].append(lig.split()[2][1:-3])  #Enlever le chevron et les 3 petits points à la fin 
-				dico[cluster].append(lig.split()[1][0:-1])        #Longueur (aa) associé, sans prendre la virgule associé
+				dico[cluster].append(lig.split()[2][1:-3])  	#Enlever le chevron et les 3 petits points à la fin 
+				dico[cluster].append(lig.split()[1][0:-1])      #Longueur (aa) associé, sans prendre la virgule associé
 	return dico
 
-##Création des dicos qui contiennent tous les clusters pour cuniculi			
-
+##Création des dicos qui contiennent tous les clusters pour cuniculi pour le cluster 1			
 funannotate_cluster100    = parse_cdhit("funannotate/cluster_prot100_funannotate.clstr")
 glimmer_cluster100        = parse_cdhit("glimmer/cluster_prot100_glimmer.clstr")
 augustus_cluster100       = parse_cdhit("augustus/cluster_prot100_augustus.clstr")
@@ -76,17 +77,16 @@ augustus_supcluster100 	  = parse_cdhit("augustus/cluster_supprot100_augustus.cl
 prodigal_supcluster100 	  = parse_cdhit("prodigal/cluster_supprot100_prodigal.clstr")
 
 
-
 #Le fait d'avoir deux dico de clusters par outils va être handicapant pour la suite, je créer donc une fonction pour me permettre de les fusionner en 1 seul 	
 def combined_dico (clusters, supclusters) :
 	liste_gene=[]
 	compt=0
-	for cluster, liste in clusters.items() :		#Ici je récupère les gènes de la database qui n'ont pas été clusterisés par le premier cd-hit  
-		if len(liste) == 2 :				#Si la liste est égal à deux le gène est seul dans son cluster (nom + taille) 
-			for supcluster, gene_predits in supclusters.items() :	#J'ouvre mon dico du second cluster
-				if len(gene_predits) > 2 and liste[0] == gene_predits[2] : #Si j'ai des gènes qui ont était clusterisé (> 2), je regarde s'il s'agit des gènes qui n'avaient pas de cluster à la base. Si l'élément 0 de la liste et égal à l'élément 2 du gène prédits 
-					clusters[cluster].append(gene_predits[0])	#J'ajoute dans mon dico de clusters de base le gène prédits par l'outil qui y correspond
-					clusters[cluster].append(gene_predits[1])	#J'ajoute également sa taille 
+	for cluster, liste in clusters.items() :						#Ici je récupère les gènes de la database qui n'ont pas été clusterisés par le premier cd-hit  
+		if len(liste) == 2 :								#Si la liste est égal à deux le gène est seul dans son cluster (nom + taille) 
+			for supcluster, gene_predits in supclusters.items() :			#J'ouvre mon dico du second cluster
+				if len(gene_predits) > 2 and liste[0] == gene_predits[2] : 	#Si j'ai des gènes qui ont était clusterisé (> 2), je regarde s'il s'agit des gènes qui n'avaient pas de cluster à la base. Si l'élément 0 de la liste et égal à l'élément 2 du gène prédits 
+					clusters[cluster].append(gene_predits[0])		#J'ajoute dans mon dico de clusters de base le gène prédits par l'outil qui y correspond
+					clusters[cluster].append(gene_predits[1])		#J'ajoute également sa taille 
 	return clusters
 					
 #Création des dico complet (contenant l'ensemble des gènes clusterisé)
@@ -100,9 +100,8 @@ def compt_gene (dico) :
 	compt=0
 	for cluster, liste in dico.items() :
 		if len(liste) > 2 :			#Je dois avoir plus d'une séquence (1 seq + 1 taille = 2, donc je dois avoir une liste plus longue que 2
-			compt += 1	
+			compt += 1			#Si j'ai un cluster j'ajoute +1
 	return compt		
-
 
 
 print("Nombre de clusters > 1 :")
@@ -112,7 +111,6 @@ print("Augustus_100 :", compt_gene(complete_augustus_cuniculi))
 print("Prodigal_100 :", compt_gene(complete_prodigal_cuniculi))
 
 
-
 ##Pourcentage de gènes trouvés par rapport à microannot
 print()
 print("Gènes prédits et clusterisés (%) par rapport à microannot :") 	#Correspond au nombre de clusters > 1 prédit sur le nombre de cluster total (nb de gènes prédits par Microannot = 1978)
@@ -120,7 +118,7 @@ print("Funannotate_100 :",(compt_gene(complete_funannotate_cuniculi))/len(funann
 print("Glimmer_100 :",(compt_gene(complete_glimmer_cuniculi))/len(glimmer_cluster100)*100)	
 print("Augustus_100 :",(compt_gene(complete_augustus_cuniculi))/len(augustus_cluster100)*100)
 print("Prodigal_100 :",(compt_gene(complete_prodigal_cuniculi))/len(prodigal_cluster100)*100)
-#print("All :", compt_gene(all_outil100)/len(all_outil100)*100)
+
 
 #Fonction pour trouver les gènes identiques qui ont était prédit par Microannot et l'autre outil 
 def same_gene (clusters) :
@@ -138,16 +136,15 @@ def same_gene (clusters) :
 	return compt
 	
 print()
-print("% gènes prédits à l'identique par l'outil ") #Correspond au nombre de clusters > 1 prédit qui ont la même longueur sur le nombre de cluster total (nb de gènes prédits par Microannot = 1978)
+print("% gènes prédits à l'identique par l'outil ") 		#Correspond au nombre de clusters > 1 prédit qui ont la même longueur sur le nombre de cluster total (nb de gènes prédits par Microannot = 1978)
 print("Funannotate_100 :",same_gene(funannotate_cluster100)/len(funannotate_cluster100)*100)
 print("Glimmer_100 :",same_gene(glimmer_cluster100)/len(glimmer_cluster100)*100)	
 print("Augustus_100 :",same_gene(augustus_cluster100)/len(augustus_cluster100)*100)
 print("Prodigal_100 :",same_gene(prodigal_cluster100)/len(prodigal_cluster100)*100)
 
 	
-
 print()
-print("% gènes prédits mais pas identique ") # Nombre de gènes correctement prédits - Nombre de gènes prédits et clusterisés 
+print("% gènes prédits mais pas identique ") 			#Nombre de gènes correctement prédits - Nombre de gènes prédits et clusterisés 
 print("Funannotate_100 :",(compt_gene(complete_funannotate_cuniculi))/len(funannotate_cluster100)*100 -same_gene(funannotate_cluster100)/len(funannotate_cluster100)*100)	
 print("Glimmer_100 :",(compt_gene(complete_glimmer_cuniculi))/len(glimmer_cluster100)*100 - same_gene(glimmer_cluster100)/len(glimmer_cluster100)*100)	
 print("Augustus_100 :",(compt_gene(complete_augustus_cuniculi))/len(augustus_cluster100)*100 -same_gene(augustus_cluster100)/len(augustus_cluster100)*100)
@@ -155,7 +152,7 @@ print("Prodigal_100 :",(compt_gene(complete_prodigal_cuniculi))/len(prodigal_clu
 
 
 print()
-print("% gènes correct non prédits par l'outil ")# 100 - nombres de gènes prédits et clusterisés 
+print("% gènes correct non prédits par l'outil ")		#100 - nombres de gènes prédits et clusterisés 
 print("Funannotate_100 :",100- (compt_gene(complete_funannotate_cuniculi))/len(funannotate_cluster100)*100)
 print("Glimmer_100 :",100- (compt_gene(complete_glimmer_cuniculi))/len(glimmer_cluster100)*100)	
 print("Augustus_100 :", 100 -(compt_gene(complete_augustus_cuniculi))/len(augustus_cluster100)*100)
@@ -185,13 +182,13 @@ def pie (unpredicted, misspredicted, predicted, outil, microsporidie) :
 	plt.close()
 
 #Faire les graphiques ici pour cuniculi
-#pie(100- (compt_gene(complete_funannotate_cuniculi))/len(funannotate_cluster100)*100, (compt_gene(complete_funannotate_cuniculi))/len(funannotate_cluster100)*100 -same_gene(funannotate_cluster100)/len(funannotate_cluster100)*100, same_gene(funannotate_cluster100)/len(funannotate_cluster100)*100, "Funannotate", "cuniculi")	#Faire le graphique de funannotate_cuniculi
+pie(100- (compt_gene(complete_funannotate_cuniculi))/len(funannotate_cluster100)*100, (compt_gene(complete_funannotate_cuniculi))/len(funannotate_cluster100)*100 -same_gene(funannotate_cluster100)/len(funannotate_cluster100)*100, same_gene(funannotate_cluster100)/len(funannotate_cluster100)*100, "Funannotate", "cuniculi")	#Faire le graphique de funannotate_cuniculi
 
-#pie(100- (compt_gene(complete_glimmer_cuniculi))/len(glimmer_cluster100)*100, (compt_gene(complete_glimmer_cuniculi))/len(glimmer_cluster100)*100 - same_gene(glimmer_cluster100)/len(glimmer_cluster100)*100, same_gene(glimmer_cluster100)/len(glimmer_cluster100)*100, "Glimmer", "cuniculi")
+pie(100- (compt_gene(complete_glimmer_cuniculi))/len(glimmer_cluster100)*100, (compt_gene(complete_glimmer_cuniculi))/len(glimmer_cluster100)*100 - same_gene(glimmer_cluster100)/len(glimmer_cluster100)*100, same_gene(glimmer_cluster100)/len(glimmer_cluster100)*100, "Glimmer", "cuniculi")
 
-#pie(100 -(compt_gene(complete_augustus_cuniculi))/len(augustus_cluster100)*100,(compt_gene(complete_augustus_cuniculi))/len(augustus_cluster100)*100 -same_gene(augustus_cluster100)/len(augustus_cluster100)*100, same_gene(augustus_cluster100)/len(augustus_cluster100)*100, "Augustus", "cuniculi")
+pie(100 -(compt_gene(complete_augustus_cuniculi))/len(augustus_cluster100)*100,(compt_gene(complete_augustus_cuniculi))/len(augustus_cluster100)*100 -same_gene(augustus_cluster100)/len(augustus_cluster100)*100, same_gene(augustus_cluster100)/len(augustus_cluster100)*100, "Augustus", "cuniculi")
 
-#pie(100 -(compt_gene(complete_prodigal_cuniculi))/len(prodigal_cluster100)*100, (compt_gene(complete_prodigal_cuniculi))/len(prodigal_cluster100)*100 -same_gene(prodigal_cluster100)/len(prodigal_cluster100)*100, same_gene(prodigal_cluster100)/len(prodigal_cluster100)*100, "Prodigal", "cuniculi")
+pie(100 -(compt_gene(complete_prodigal_cuniculi))/len(prodigal_cluster100)*100, (compt_gene(complete_prodigal_cuniculi))/len(prodigal_cluster100)*100 -same_gene(prodigal_cluster100)/len(prodigal_cluster100)*100, same_gene(prodigal_cluster100)/len(prodigal_cluster100)*100, "Prodigal", "cuniculi")
 
 
 
@@ -214,7 +211,7 @@ def combined_pie (microsporidie) :
 	plt.close()
 	
 
-#combined_pie('cuniculi')			#Pour les graphs de cuniculi
+combined_pie('cuniculi')			#Pour les graphs de cuniculi
 
 	
 #Je souhaite faire un diagramme de Venn, pour cela je vais créer la listes des gènes de la base de données qui sont prédits (correctes ou non) pour l'outils, j'en profite pour récupérer les gènes non prédits
@@ -275,7 +272,7 @@ def venn_tools (liste_aug, liste_fun, liste_gli, liste_prod, microsporidie) :
 	plt.close()
 
 ##Print le diagramme de Venn 
-#venn_tools(predicted_augustus_cuniculi, predicted_funannotate_cuniculi, predicted_glimmer_cuniculi, predicted_prodigal_cuniculi, "cuniculi")
+venn_tools(predicted_augustus_cuniculi, predicted_funannotate_cuniculi, predicted_glimmer_cuniculi, predicted_prodigal_cuniculi, "cuniculi")
 
 
 
@@ -305,7 +302,6 @@ for gene in unpredicted_genes(unpredicted_augustus_cuniculi,unpredicted_funannot
 liste_unpredicted_cuniculi = unpredicted_genes(unpredicted_augustus_cuniculi,unpredicted_funannotate_cuniculi, unpredicted_glimmer_cuniculi, unpredicted_prodigal_cuniculi)
 
 #Je peux également me servir de cette fonction pour garder uniquement les gènes prédits par tous les outils:
-
 predicted_genes_cuniculi = open("result_cuniculi/predicted_genes_cuniculi", 'w') 
 
 for gene in unpredicted_genes(predicted_augustus_cuniculi, predicted_funannotate_cuniculi, predicted_glimmer_cuniculi, predicted_prodigal_cuniculi):
@@ -334,13 +330,13 @@ length_predicted_cuniculi = compt_length(liste_predicted_cuniculi)	#Liste des ta
 #Fonction pour le faire :
 def hist (unpredicted, predicted, microsporidie) :		#Liste taille unpredicted, liste taille predicted et la microsporidie utilisé
 
-	size_unpredicted = unpredicted
-	size_predicted = predicted
+	size_unpredicted = unpredicted				#Groupe contenant la taille des gènes non prédits
+	size_predicted = predicted				#Groupe contenant la taille des gènes prédits
 	
 	fig, ax = plt.subplots()
 	
 	#Je définis mon échelle pour les abscisses
-	bins = np.arange(0, 6001,100)		#Ici je veux aller de 0 à 6000 nt, avec un pas de 100 
+	bins = np.arange(0, 6001,100)				#Ici je veux aller de 0 à 6000 nt, avec un pas de 100 
 
 
 	ax.hist(size_unpredicted, bins=bins, alpha=0.5, label = "Unpredicted genes", edgecolor = 'black')
@@ -422,98 +418,14 @@ def bar_charts_genes(nb_genes_totals, nb_genes_predits, microsporidie) :
 	plt.close()
 
 #Print ce bar charts
-#bar_charts_genes(len(complete_glimmer_cuniculi), (len(complete_glimmer_cuniculi)-len(liste_unpredicted_cuniculi)), "cuniculi")
-
-"""
-##Faire des diagrammes de Venn qui répresente le protéome de base, les gènes qui ont été trouvé par au moins un outil à l'intersection, les gènes jamais prédits, et les nouveaux gènes prédits
-
-#Besoin de pip install matplotlib matplotlib-venn
-def venn_diagram(A, B, AB, microsporidie) :
-	A = len(A)			#unpredicted_genes
-	B = len(B)			#new_genes
-	AB = int(AB)			#gene trouvés par au moins un outil 
-	
-	
-	venn = venn2(subsets=(1, 1, 1), set_labels=('Microannot database', 'All tools'))	#1,1,1 pour ne pas respecter l'échelle (plus lisible), je nomme mes deux groupes 
-	
-	#Mettre les valeurs dans les bons groupes
-	venn.get_label_by_id('10').set_text(A)
-	venn.get_label_by_id('01').set_text(B)
-	venn.get_label_by_id('11').set_text(AB)
-	
-	
-	#Titre
-	plt.title("Result of all tools on "+microsporidie, fontweight='bold')
-	
-	#Legende
-	plt.xlim(-1, 1)
-	plt.ylim(-1, 1)				#Pour que la légende ne chevauche pas le diagramme
-	plt.legend(['unpredicted genes', 'new predicted genes', 'predicted genes'], loc='lower right', bbox_to_anchor=(1.05, - 0.05))
-	
-	
-	#Enregistrer la figure 
-	plt.savefig("result_"+microsporidie+"/Venn/"+microsporidie+".png")
-	plt.close()
-
-venn_diagram(unpredicted_genes(all_outil100), new_genes(new_all_outil100), compt_gene(all_outil100), "cuniculi")			#POUR CUNICULI 
-	
-	
-##Faire un treemap avec les données des gènes trouvés par au moins un des 4 outils, les gènes trouvés par tous les outils et les gènes correctement trouvés par tous les outils 
-
-
-def treemap(all_predicted, predicted, same_predicted, microsporidie) :
-	values =[int(all_predicted), len(predicted), len(same_predicted)] 	#Associer les valeurs correspondantes
-	labels =[f"{values[0]}", f"{values[1]}", f"{values[2]}"]		#Les stocker pour les affichés dans les différents rectangles
-	colors = ['#EEAB47','#F6D6A6', '#FCF2E4']				#Couleurs associées
-	
-	fig, ax = plt.subplots(1, figsize = (12,6))
-	
-	x, y = 0.1, 0.1
-	width, height = 0.9, 0.9		#Données du premier rectangle (Les gènes prédits par au moins 1 outils)
-	
-	#Boucle pour print mes rectangles
-	for i, (value, label, color) in enumerate(zip(values, labels, colors)):
-		rect = patches.Rectangle((x,y), width, height, linewidth=1, edgecolor='black', facecolor=color, alpha=0.8)			#Print le rectangle avec les données mises à jours à chaque boucle (3)
-		ax.add_patch(rect)
-		
-		plt.text(x + width * 0.02, y + height * 0.98, label, va='top', ha='left', fontsize=12, color='black', fontweight = 'bold' )			#J'affiche le label correspondant en haut à gauche du rectangle 
-		
-		#Je diminue la taille pour créer un rectangle plus petit 
-		x += width * 0.1	
-		y += height * 0.1
-		width *= 0.8
-		height *= 0.8
-	
-	
-	
-	#Je créer mes légends 
-	legend_patches = [Patch(facecolor=colors[0], edgecolor='black', label='Genes predicted by at least one tools'), Patch(facecolor=colors[1], edgecolor='black', label='Genes predicted by the 4 tools'), Patch(facecolor=colors[2], edgecolor='black', label='Genes correctly predicted by the 4 tools')]
-	
-	
-	
-	#J'applique mes légendes 
-	ax.legend(handles = legend_patches, bbox_to_anchor=(1,0.1), ncol = 1) 
-	
-	ax.axis('off')
-	
-	#Titre 
-	plt.title("Onion diagram of predicted genes for "+microsporidie, fontweight = 'bold')
-	
-	#Enregistrer la figure 
-	plt.savefig("result_"+microsporidie+"/Onion/"+microsporidie+".png")
-	plt.close()
-	
-
- 
-treemap(compt_gene(all_outil100), predicted_genes(all_outil100), same_predicted_genes(all_outil100), 'cuniculi')
-"""
+bar_charts_genes(len(complete_glimmer_cuniculi), (len(complete_glimmer_cuniculi)-len(liste_unpredicted_cuniculi)), "cuniculi")
 
 
 ##Je créer une fonction que me permets de parcourir les dicos des clusters pour créer un fichier csv avec en colonne 1 le nom du contig, en colonne 2 le nom du contig trouvé ou "ND" si rien ne correspond et en colonne 3 si les gènes prédits sont les mêmes ou non (erreur start, stop, frameshift...)
 
-def csv (dico) :				#1er dico = clusters, 2ème dico = gène trouvé juste par l'outil (non-clusterisé)
-	for c,v in dico.items():			#Pour les clefs et les valeurs de mon dico 
-		if len(v) == 4:					#Si v == 2 alors il y a un gène trouvé par l'outil  
+def csv (dico) :							#1er dico = clusters, 2ème dico = gène trouvé juste par l'outil (non-clusterisé)
+	for c,v in dico.items():					#Pour les clefs et les valeurs de mon dico 
+		if len(v) == 4:						#Si v == 2 alors il y a un gène trouvé par l'outil  
 			print(v[0],";", v[2],end= "")			#Je print le nom du conting de base puis le nom du contig de l'outil (";" car fichier csv) 
 			match = re.search(r'c?\(?(\d+)-(\d+)\)?', v[0])	#Je cherche ce motif pour la valeur[0] 
 			if match :					#Si je le trouve alors 
@@ -523,7 +435,7 @@ def csv (dico) :				#1er dico = clusters, 2ème dico = gène trouvé juste par l
 			if match1 :
 				start1, end1 = map(int, match1.groups())
 		
-			if (start1, end1) == (start, end) :
+			if (start1, end1) == (start, end) :		#Comparer les coordonnées, ici si les coordonnées sont les mêmes = pas d'erreur 
 				print("; OK")
 			else :
 				if start != start1 and end != end1 :
@@ -598,7 +510,7 @@ def csv (dico) :				#1er dico = clusters, 2ème dico = gène trouvé juste par l
 					print("; error - start (", end,"/", end2, ")", sep="" )	
 					
 					
-		if len(v) == 8 :					# Trois gène prédits
+		if len(v) == 8 :					#Trois gène prédits
 			print(v[0],";", v[2], end="")			#Premier gène
 			
 			
@@ -687,23 +599,21 @@ def stdout (outil, file, dico, liste)	:
 	original_stdout = sys.stdout
 	with open (file, 'w') as f :
 		sys.stdout = f
-		print("PROTEOME ;",outil,"; ERROR",outil)				#Nom de mes colonnes (l'outil est à préciser en temps que str en appelant la fonction 
+		print("PROTEOME ;",outil,"; ERROR",outil)		#Nom de mes colonnes (l'outil est à préciser en temps que str en appelant la fonction 
 		csv(dico)
 		for gene in liste :					#J'ajoute à mon print les gènes qui ont été trouvé seulement par l'outil 
 			print("ND ;",gene,"; ND")
 		sys.stdout = original_stdout	
 		
 ##Print les feuilles csv	
-"""	
 stdout('GLIMMER', 'result_cuniculi/glimmer.csv', complete_glimmer_cuniculi, unclusterized_glimmer_cuniculi)		#Glimmer_cuniculi
-
 stdout('AUGUSTUS', 'result_cuniculi/augustus.csv', complete_augustus_cuniculi, unclusterized_augustus_cuniculi)		#Augustus_cuniculi
 stdout('FUNANNOTATE','result_cuniculi/funannotate.csv', complete_funannotate_cuniculi, unclusterized_funannotate_cuniculi)	#Funannotate_cuniculi
 stdout('PRODIGAL', 'result_cuniculi/prodigal.csv', complete_prodigal_cuniculi, unclusterized_prodigal_cuniculi)		#Prodigal_cuniculi
-"""
 
 
 
+#=====================================BIENEUSI=============================================
 print()
 print("===========================POUR BIENEUSi===============================")
 print("Nombre total de gènes prédits par l'outil")
@@ -714,14 +624,14 @@ print("Prodigal :", len(gene_predict('prodigal/Proteomes_E.bieneusi_prodigal')))
 print()
 
 ##Dico des gènes prédits juste par l'outil
-funannotate_bieneusi= gene_predict('funannotate_bieneusi/cluster_bieneusi_funannotate')
-glimmer_bieneusi = gene_predict('glimmer/cluster_bieneusi_glimmer')
-augustus_bieneusi = gene_predict('augustus/cluster_bieneusi_augustus')
-prodigal_bieneusi = gene_predict('prodigal/cluster_bieneusi_prodigal')
+funannotate_bieneusi = gene_predict('funannotate_bieneusi/cluster_bieneusi_funannotate')
+glimmer_bieneusi     = gene_predict('glimmer/cluster_bieneusi_glimmer')
+augustus_bieneusi    = gene_predict('augustus/cluster_bieneusi_augustus')
+prodigal_bieneusi    = gene_predict('prodigal/cluster_bieneusi_prodigal')
 
 ##Création des dicos qui contiennent tous les clusters pour bieneusi
 funannotate_bieneusi_cluster = parse_cdhit("funannotate_bieneusi/cluster_bieneusi_funannotate.clstr")
-glimmer_bieneusi_cluster       = parse_cdhit("glimmer/cluster_bieneusi_glimmer.clstr")
+glimmer_bieneusi_cluster     = parse_cdhit("glimmer/cluster_bieneusi_glimmer.clstr")
 augustus_bieneusi_cluster    = parse_cdhit("augustus/cluster_bieneusi_augustus.clstr")
 prodigal_bieneusi_cluster    = parse_cdhit("prodigal/cluster_bieneusi_prodigal.clstr")
 
@@ -734,9 +644,9 @@ prodigal_bieneusi_supcluster 	  = parse_cdhit("prodigal/cluster_supbieneusi_prod
 
 #Création des dico complet (contenant l'ensemble des gènes clusterisé)
 complete_funannotate_bieneusi = combined_dico(funannotate_bieneusi_cluster, funannotate_bieneusi_supcluster)
-complete_glimmer_bieneusi = combined_dico(glimmer_bieneusi_cluster, glimmer_bieneusi_supcluster)
-complete_augustus_bieneusi = combined_dico(augustus_bieneusi_cluster,augustus_bieneusi_supcluster)
-complete_prodigal_bieneusi = combined_dico(prodigal_bieneusi_cluster,prodigal_bieneusi_supcluster)
+complete_glimmer_bieneusi     = combined_dico(glimmer_bieneusi_cluster, glimmer_bieneusi_supcluster)
+complete_augustus_bieneusi    = combined_dico(augustus_bieneusi_cluster,augustus_bieneusi_supcluster)
+complete_prodigal_bieneusi    = combined_dico(prodigal_bieneusi_cluster,prodigal_bieneusi_supcluster)
 
 #Compter le nombre de clusters 
 print("Nombre de clusters > 1 :")
@@ -781,15 +691,15 @@ print()
 
 #Faire les pie charts pour bieneusi :
 
-#pie(100- (compt_gene(complete_funannotate_bieneusi))/len(funannotate_bieneusi_cluster)*100, (compt_gene(complete_funannotate_bieneusi))/len(funannotate_bieneusi_cluster)*100 -same_gene(funannotate_bieneusi_cluster)/len(funannotate_bieneusi_cluster)*100, same_gene(funannotate_bieneusi_cluster)/len(funannotate_bieneusi_cluster)*100, "Funannotate", "bieneusi")	#Faire le graphique de funannotate_cuniculi
+pie(100- (compt_gene(complete_funannotate_bieneusi))/len(funannotate_bieneusi_cluster)*100, (compt_gene(complete_funannotate_bieneusi))/len(funannotate_bieneusi_cluster)*100 -same_gene(funannotate_bieneusi_cluster)/len(funannotate_bieneusi_cluster)*100, same_gene(funannotate_bieneusi_cluster)/len(funannotate_bieneusi_cluster)*100, "Funannotate", "bieneusi")	#Faire le graphique de funannotate_cuniculi
 
-#pie(100- (compt_gene(complete_glimmer_bieneusi))/len(glimmer_bieneusi_cluster)*100, (compt_gene(complete_glimmer_bieneusi))/len(glimmer_bieneusi_cluster)*100 - same_gene(glimmer_bieneusi_cluster)/len(glimmer_bieneusi_cluster)*100, same_gene(glimmer_bieneusi_cluster)/len(glimmer_bieneusi_cluster)*100, "Glimmer", "bieneusi")
+pie(100- (compt_gene(complete_glimmer_bieneusi))/len(glimmer_bieneusi_cluster)*100, (compt_gene(complete_glimmer_bieneusi))/len(glimmer_bieneusi_cluster)*100 - same_gene(glimmer_bieneusi_cluster)/len(glimmer_bieneusi_cluster)*100, same_gene(glimmer_bieneusi_cluster)/len(glimmer_bieneusi_cluster)*100, "Glimmer", "bieneusi")
 
-#pie(100 -(compt_gene(complete_augustus_bieneusi))/len(augustus_bieneusi_cluster)*100,(compt_gene(complete_augustus_bieneusi))/len(augustus_bieneusi_cluster)*100 -same_gene(augustus_bieneusi_cluster)/len(augustus_bieneusi_cluster)*100, same_gene(augustus_bieneusi_cluster)/len(augustus_bieneusi_cluster)*100, "Augustus", "bieneusi")
+pie(100 -(compt_gene(complete_augustus_bieneusi))/len(augustus_bieneusi_cluster)*100,(compt_gene(complete_augustus_bieneusi))/len(augustus_bieneusi_cluster)*100 -same_gene(augustus_bieneusi_cluster)/len(augustus_bieneusi_cluster)*100, same_gene(augustus_bieneusi_cluster)/len(augustus_bieneusi_cluster)*100, "Augustus", "bieneusi")
 
-#pie(100 -(compt_gene(complete_prodigal_bieneusi))/len(prodigal_bieneusi_cluster)*100, (compt_gene(complete_prodigal_bieneusi))/len(prodigal_bieneusi_cluster)*100 -same_gene(prodigal_bieneusi_cluster)/len(prodigal_bieneusi_cluster)*100, same_gene(prodigal_bieneusi_cluster)/len(prodigal_bieneusi_cluster)*100, "Prodigal", "bieneusi")
+pie(100 -(compt_gene(complete_prodigal_bieneusi))/len(prodigal_bieneusi_cluster)*100, (compt_gene(complete_prodigal_bieneusi))/len(prodigal_bieneusi_cluster)*100 -same_gene(prodigal_bieneusi_cluster)/len(prodigal_bieneusi_cluster)*100, same_gene(prodigal_bieneusi_cluster)/len(prodigal_bieneusi_cluster)*100, "Prodigal", "bieneusi")
 
-#combined_pie('bieneusi')
+combined_pie('bieneusi')
 
 
 #Maintenant je récupère les gènes prédits par tous les outils et ceux jamais prédits
@@ -801,7 +711,7 @@ predicted_prodigal_bieneusi, unpredicted_prodigal_bieneusi = predicted_genes(com
 
 
 #Faire le diagramme de Venn
-#venn_tools(predicted_augustus_bieneusi, predicted_funannotate_bieneusi, predicted_glimmer_bieneusi, predicted_prodigal_bieneusi, "bieneusi")
+venn_tools(predicted_augustus_bieneusi, predicted_funannotate_bieneusi, predicted_glimmer_bieneusi, predicted_prodigal_bieneusi, "bieneusi")
 
 
 #Récupérer les gènes prédits par les différents outils qui n'ont jamais était clusterisés
@@ -826,7 +736,6 @@ for gene in unpredicted_genes(unpredicted_augustus_bieneusi,unpredicted_funannot
 liste_unpredicted_bieneusi = unpredicted_genes(unpredicted_augustus_bieneusi,unpredicted_funannotate_bieneusi, unpredicted_glimmer_bieneusi, unpredicted_prodigal_bieneusi)
 
 #Je peux également me servir de cette fonction pour garder uniquement les gènes prédits par tous les outils:
-
 predicted_genes_bieneusi = open("result_bieneusi/predicted_genes_bieneusi", 'w') 
 
 for gene in unpredicted_genes(predicted_augustus_bieneusi, predicted_funannotate_bieneusi, predicted_glimmer_bieneusi, predicted_prodigal_bieneusi):
@@ -841,9 +750,7 @@ length_unpredicted_bieneusi = compt_length(liste_unpredicted_bieneusi)	#Liste de
 length_predicted_bieneusi = compt_length(liste_predicted_bieneusi)	#Liste des tailles de gènes prédits par les 4 outils 
 
 #Faire l'histo
-#hist(length_unpredicted_bieneusi, length_predicted_bieneusi, "bieneusi")
-
-
+hist(length_unpredicted_bieneusi, length_predicted_bieneusi, "bieneusi")
 
 #Faire le bar_charts pour bieneusi
 bar_charts(complete_glimmer_bieneusi,(len(gene_predict('augustus/Proteomes_E.bieneusi_augustus'))-len(unclusterized_augustus_bieneusi)), (len(gene_predict('funannotate_bieneusi/Proteomes_E.bieneusi_funannotate'))- len(unclusterized_funannotate_bieneusi)), (len(gene_predict('glimmer/Proteomes_E.bieneusi_glimmer'))- len(unclusterized_glimmer_bieneusi)), (len(gene_predict('prodigal/Proteomes_E.bieneusi_prodigal'))- len(unclusterized_prodigal_bieneusi)), len(unclusterized_augustus_bieneusi), len(unclusterized_funannotate_bieneusi), len(unclusterized_glimmer_bieneusi), len(unclusterized_prodigal_bieneusi), "bieneusi")
@@ -851,20 +758,19 @@ bar_charts(complete_glimmer_bieneusi,(len(gene_predict('augustus/Proteomes_E.bie
 
 
 ##Print les feuilles csv
-"""
+
 #Faire les feuilles csv
 stdout('GLIMMER', 'result_bieneusi/glimmer.csv', complete_glimmer_bieneusi, unclusterized_glimmer_bieneusi)		#Glimmer_bieneusi
-
 stdout('AUGUSTUS', 'result_bieneusi/augustus.csv', complete_augustus_bieneusi, unclusterized_augustus_bieneusi)		#Augustus_bieneusi
 stdout('FUNANNOTATE','result_bieneusi/funannotate.csv', complete_funannotate_bieneusi, unclusterized_funannotate_bieneusi)	#Funannotate_bieneusi
 stdout('PRODIGAL', 'result_bieneusi/prodigal.csv', complete_prodigal_bieneusi, unclusterized_prodigal_bieneusi)		#Prodigal_bieneusi
-"""
+
 
 #Print le bar_charts du nombre de gènes dans la base de données et le nombre de gènes prédits et clusterisé via les 4 outils
-#bar_charts_genes(len(complete_glimmer_bieneusi), (len(complete_glimmer_bieneusi)-len(liste_unpredicted_bieneusi)), "bieneusi")
+bar_charts_genes(len(complete_glimmer_bieneusi), (len(complete_glimmer_bieneusi)-len(liste_unpredicted_bieneusi)), "bieneusi")
 
 
-#======================================================================================================
+#=========================================CERANAE=============================================================
 print()
 print("===========================POUR CERANAE==============================")
 print("Nombre total de gènes prédits par l'outil")
@@ -885,22 +791,22 @@ prodigal_ceranae = gene_predict('prodigal/cluster_ceranae_prodigal')
 
 ##Création des dicos qui contiennent tous les clusters pour bieneusi
 funannotate_ceranae_cluster = parse_cdhit("funannotate_ceranae/cluster_ceranae_funannotate.clstr")
-glimmer_ceranae_cluster       = parse_cdhit("glimmer/cluster_ceranae_glimmer.clstr")
+glimmer_ceranae_cluster     = parse_cdhit("glimmer/cluster_ceranae_glimmer.clstr")
 augustus_ceranae_cluster    = parse_cdhit("augustus/cluster_ceranae_augustus.clstr")
 prodigal_ceranae_cluster    = parse_cdhit("prodigal/cluster_ceranae_prodigal.clstr")
 
 
 #Les deuxième cluster contenant les gènes non clusterisés la première fois mais clusterisé la seconde
 funannotate_ceranae_supcluster   = parse_cdhit("funannotate_ceranae/cluster_supceranae_funannotate.clstr")
-glimmer_ceranae_supcluster 	  = parse_cdhit("glimmer/cluster_supceranae_glimmer.clstr")
-augustus_ceranae_supcluster 	  = parse_cdhit("augustus/cluster_supceranae_augustus.clstr")
-prodigal_ceranae_supcluster 	  = parse_cdhit("prodigal/cluster_supceranae_prodigal.clstr")
+glimmer_ceranae_supcluster 	 = parse_cdhit("glimmer/cluster_supceranae_glimmer.clstr")
+augustus_ceranae_supcluster 	 = parse_cdhit("augustus/cluster_supceranae_augustus.clstr")
+prodigal_ceranae_supcluster 	 = parse_cdhit("prodigal/cluster_supceranae_prodigal.clstr")
 
 #Création des dico complet (contenant l'ensemble des gènes clusterisé)
 complete_funannotate_ceranae = combined_dico(funannotate_ceranae_cluster, funannotate_ceranae_supcluster)
-complete_glimmer_ceranae = combined_dico(glimmer_ceranae_cluster, glimmer_ceranae_supcluster)
-complete_augustus_ceranae = combined_dico(augustus_ceranae_cluster,augustus_ceranae_supcluster)
-complete_prodigal_ceranae = combined_dico(prodigal_ceranae_cluster,prodigal_ceranae_supcluster)
+complete_glimmer_ceranae     = combined_dico(glimmer_ceranae_cluster, glimmer_ceranae_supcluster)
+complete_augustus_ceranae    = combined_dico(augustus_ceranae_cluster,augustus_ceranae_supcluster)
+complete_prodigal_ceranae    = combined_dico(prodigal_ceranae_cluster,prodigal_ceranae_supcluster)
 
 
 #Compter le nombre de clusters 
@@ -1008,184 +914,24 @@ length_unpredicted_ceranae = compt_length(liste_unpredicted_ceranae)	#Liste des 
 length_predicted_ceranae = compt_length(liste_predicted_ceranae)	#Liste des tailles de gènes prédits par les 4 outils 
 
 ##Faire l'histo
-#hist(length_unpredicted_ceranae, length_predicted_ceranae, "ceranae")
+hist(length_unpredicted_ceranae, length_predicted_ceranae, "ceranae")
 
 ##Faire le bar_charts pour ceranae
+bar_charts(complete_glimmer_ceranae,(len(gene_predict('augustus/Proteomes_N.ceranae_augustus'))-len(unclusterized_augustus_ceranae)), (len(gene_predict('funannotate_ceranae/Proteomes_N.ceranae_funannotate'))- len(unclusterized_funannotate_ceranae)), (len(gene_predict('glimmer/Proteomes_N.ceranae_glimmer'))- len(unclusterized_glimmer_ceranae)), (len(gene_predict('prodigal/Proteomes_N.ceranae_prodigal'))- len(unclusterized_prodigal_ceranae)), len(unclusterized_augustus_ceranae), len(unclusterized_funannotate_ceranae), len(unclusterized_glimmer_ceranae), len(unclusterized_prodigal_ceranae), "ceranae")
 
 
-#bar_charts(complete_glimmer_ceranae,(len(gene_predict('augustus/Proteomes_N.ceranae_augustus'))-len(unclusterized_augustus_ceranae)), (len(gene_predict('funannotate_ceranae/Proteomes_N.ceranae_funannotate'))- len(unclusterized_funannotate_ceranae)), (len(gene_predict('glimmer/Proteomes_N.ceranae_glimmer'))- len(unclusterized_glimmer_ceranae)), (len(gene_predict('prodigal/Proteomes_N.ceranae_prodigal'))- len(unclusterized_prodigal_ceranae)), len(unclusterized_augustus_ceranae), len(unclusterized_funannotate_ceranae), len(unclusterized_glimmer_ceranae), len(unclusterized_prodigal_ceranae), "ceranae")
-
-"""
 #Faire les feuilles csv
 stdout('GLIMMER', 'result_ceranae/glimmer.csv', complete_glimmer_ceranae, unclusterized_glimmer_ceranae)		#Glimmer_ceranae
-
 stdout('AUGUSTUS', 'result_ceranae/augustus.csv', complete_augustus_ceranae, unclusterized_augustus_ceranae)		#Augustus_ceranae
 stdout('FUNANNOTATE','result_ceranae/funannotate.csv', complete_funannotate_ceranae, unclusterized_funannotate_ceranae)	#Funannotate_ceranae
 stdout('PRODIGAL', 'result_ceranae/prodigal.csv', complete_prodigal_ceranae, unclusterized_prodigal_ceranae)		#Prodigal_ceranae
 
-"""
 
 
 #Print le bar_charts du nombre de gènes dans la base de données et le nombre de gènes prédits et clusterisé via les 4 outils
-#bar_charts_genes(len(complete_glimmer_ceranae), (len(complete_glimmer_ceranae)-len(liste_unpredicted_ceranae)), "ceranae")
+bar_charts_genes(len(complete_glimmer_ceranae), (len(complete_glimmer_ceranae)-len(liste_unpredicted_ceranae)), "ceranae")
 
-
-
-#======================================================================================================
-print()
-print("===========================POUR ALGERAE==============================")
-print("Nombre total de gènes prédits par l'outil")
-#print("Funannotate :", len(gene_predict('funannotate_algerae/Proteomes_A.algerae_funannotate')))
-print("Glimmer :", len(gene_predict('glimmer/Proteomes_A.algerae_glimmer')))
-print("Augustus :", len(gene_predict('augustus/Proteomes_A.algerae_augustus')))
-print("Prodigal :", len(gene_predict('prodigal/Proteomes_A.algerae_prodigal')))
-print()
-
-##Dico des bases de données clean de microannot
-dico_algerae = gene_predict('Proteomes_A.algerae.txt')
-
-##Dico des gènes prédits juste par l'outil
-#funannotate_algerae = gene_predict('funannotate_algerae/cluster_algerae_funannotate')
-glimmer_algerae = gene_predict('glimmer/cluster_algerae_glimmer')
-augustus_algerae = gene_predict('augustus/cluster_algerae_augustus')
-prodigal_algerae = gene_predict('prodigal/cluster_algerae_prodigal')
-
-##Création des dicos qui contiennent tous les clusters pour bieneusi
-#funannotate_algerae_cluster = parse_cdhit("funannotate_algerae/cluster_algerae_funannotate.clstr")
-glimmer_algerae_cluster       = parse_cdhit("glimmer/cluster_algerae_glimmer.clstr")
-augustus_algerae_cluster    = parse_cdhit("augustus/cluster_algerae_augustus.clstr")
-prodigal_algerae_cluster    = parse_cdhit("prodigal/cluster_algerae_prodigal.clstr")
-
-
-#Les deuxième cluster contenant les gènes non clusterisés la première fois mais clusterisé la seconde
-#funannotate_algerae_supcluster   = parse_cdhit("funannotate_algerae/cluster_supalgerae_funannotate.clstr")
-glimmer_algerae_supcluster 	  = parse_cdhit("glimmer/cluster_supalgerae_glimmer.clstr")
-augustus_algerae_supcluster 	  = parse_cdhit("augustus/cluster_supalgerae_augustus.clstr")
-prodigal_algerae_supcluster 	  = parse_cdhit("prodigal/cluster_supalgerae_prodigal.clstr")
-
-#Création des dico complet (contenant l'ensemble des gènes clusterisé)
-#complete_funannotate_algerae = combined_dico(funannotate_algerae_cluster, funannotate_algerae_supcluster)
-complete_glimmer_algerae = combined_dico(glimmer_algerae_cluster, glimmer_algerae_supcluster)
-complete_augustus_algerae = combined_dico(augustus_algerae_cluster,augustus_algerae_supcluster)
-complete_prodigal_algerae = combined_dico(prodigal_algerae_cluster,prodigal_algerae_supcluster)
-
-
-#Compter le nombre de clusters 
-print("Nombre de clusters > 1 :")
-#print("Funannotate_algerae :", compt_gene(complete_funannotate_algerae))
-print("Glimmer_algerae :", compt_gene(complete_glimmer_algerae))
-print("Augustus_algerae :", compt_gene(complete_augustus_algerae))
-print("Prodigal_algerae :", compt_gene(complete_prodigal_algerae))
-
-##Pourcentage de gènes trouvés par rapport à microannot
-print()
-print("Gènes prédits et clusterisés (%) par rapport à microannot :") 	#Correspond au nombre de clusters > 1 prédit sur le nombre de cluster total (nb de gènes prédits par Microannot = 1978)
-#print("Funannotate_algerae :",(compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100)	
-print("Glimmer_algerae :",(compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100)	
-print("Augustus_algerae :",(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100)
-print("Prodigal_algerae :",(compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100)
-
-print()
-print("% gènes prédits à l'identique par l'outil ") #Correspond au nombre de clusters > 1 prédit qui ont la même longueur sur le nombre de cluster total (nb de gènes prédits par Microannot = 1978)
-#print("Funannotate_algerae :",same_gene(funannotate_algerae_cluster)/len(funannotate_algerae_cluster)*100)
-print("Glimmer_algerae :",same_gene(glimmer_algerae_cluster)/len(glimmer_algerae_cluster)*100)	
-print("Augustus_algerae :",same_gene(augustus_algerae_cluster)/len(augustus_algerae_cluster)*100)
-print("Prodigal_algerae :",same_gene(prodigal_algerae_cluster)/len(prodigal_algerae_cluster)*100)
-
-
-
-print()
-print("% gènes prédits mais pas identique ") # Nombre de gènes correctement prédits - Nombre de gènes prédits et clusterisés 
-#print("Funannotate_algerae :",(compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100 -same_gene(funannotate_algerae_cluster)/len(funannotate_algerae_cluster)*100)	
-print("Glimmer_algerae :",(compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100 - same_gene(glimmer_algerae_cluster)/len(glimmer_algerae_cluster)*100)	
-print("Augustus_algerae :",(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100 -same_gene(augustus_algerae_cluster)/len(augustus_algerae_cluster)*100)
-print("Prodigal_algerae :",(compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100 -same_gene(prodigal_algerae_cluster)/len(prodigal_algerae_cluster)*100)
-
-
-print()
-print("% gènes correct non prédits par l'outil ")# 100 - nombres de gènes prédits et clusterisés 
-#print("Funannotate_algerae :",100- (compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100)
-print("Glimmer_algerae :",100- (compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100)	
-print("Augustus_algerae :", 100 -(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100)
-print("Prodigal_algerae :", 100 -(compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100)
-print()
-
-
-#Faire les pie charts pour algerae :
-
-#pie(100- (compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100, (compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100 -same_gene(funannotate_algerae_cluster)/len(funannotate_algerae_cluster)*100, same_gene(funannotate_algerae_cluster)/len(funannotate_algerae_cluster)*100, "Funannotate", "algerae")	#Faire le graphique de funannotate_cuniculi
-
-pie(100- (compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100, (compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100 - same_gene(glimmer_algerae_cluster)/len(glimmer_algerae_cluster)*100, same_gene(glimmer_algerae_cluster)/len(glimmer_algerae_cluster)*100, "Glimmer", "algerae")
-
-pie(100 -(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100,(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100 -same_gene(augustus_algerae_cluster)/len(augustus_algerae_cluster)*100, same_gene(augustus_algerae_cluster)/len(augustus_algerae_cluster)*100, "Augustus", "algerae")
-
-pie(100 -(compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100, (compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100 -same_gene(prodigal_algerae_cluster)/len(prodigal_algerae_cluster)*100, same_gene(prodigal_algerae_cluster)/len(prodigal_algerae_cluster)*100, "Prodigal", "algerae")
-
-
-#combined_pie('algerae')
-"""
-#Maintenant je récupère les gènes prédits par tous les outils et ceux jamais prédits
-#J'associe mes listes pour algerae
-predicted_funannotate_algerae, unpredicted_funannotate_algerae = predicted_genes(complete_funannotate_algerae)
-predicted_glimmer_algerae, unpredicted_glimmer_algerae = predicted_genes(complete_glimmer_algerae)	
-predicted_augustus_algerae, unpredicted_augustus_algerae = predicted_genes(complete_augustus_algerae)
-predicted_prodigal_algerae, unpredicted_prodigal_algerae = predicted_genes(complete_prodigal_algerae)
-
-
-
-#Faire le diagramme de Venn
-venn_tools(predicted_augustus_algerae, predicted_funannotate_algerae, predicted_glimmer_algerae, predicted_prodigal_algerae, "algerae")
-
-
-#Récupérer les gènes prédits par les différents outils qui n'ont jamais était clusterisés
-unclusterized_funannotate_algerae = unclusterized(funannotate_algerae_supcluster)
-unclusterized_glimmer_algerae = unclusterized(glimmer_algerae_supcluster)
-unclusterized_augustus_algerae = unclusterized(augustus_algerae_supcluster))
-unclusterized_prodigal_algerae = unclusterized(prodigal_algerae_supcluster)
-
-#Trouver les gènes de la base de données qui n'ont jamais été clusterisé
-#Je stock le nom de ces gènes dans 
-unpredicted_genes_algerae = open("result_algerae/unpredicted_genes_algerae", 'w') 
-
-for gene in unpredicted_genes(unpredicted_augustus_algerae,unpredicted_funannotate_algerae, unpredicted_glimmer_algerae, unpredicted_prodigal_algerae):
-	print(gene, file=unpredicted_genes_algerae)
-	
-#Je stock les gènes non prédits dans cette liste 	
-liste_unpredicted_algerae = unpredicted_genes(unpredicted_augustus_algerae,unpredicted_funannotate_algerae, unpredicted_glimmer_algerae, unpredicted_prodigal_algerae)
-
-#Je peux également me servir de cette fonction pour garder uniquement les gènes prédits par tous les outils:
-
-predicted_genes_algerae = open("result_algerae/predicted_genes_algerae", 'w') 
-
-for gene in unpredicted_genes(predicted_augustus_algerae, predicted_funannotate_algerae, predicted_glimmer_algerae, predicted_prodigal_algerae):
-	print(gene, file=predicted_genes_algerae)
-	
-#Je stock les gènes prédits dans cette liste 	
-liste_predicted_algerae = unpredicted_genes(predicted_augustus_algerae, predicted_funannotate_algerae, predicted_glimmer_algerae, predicted_prodigal_algerae)
-
-#Pour créer mon histogramme j'ai besoin des listes des tailles	
-length_unpredicted_algerae = compt_length(liste_unpredicted_algerae)	#Liste des tailles de gènes non prédits
-length_predicted_algerae = compt_length(liste_predicted_algerae)	#Liste des tailles de gènes prédits par les 4 outils 
-
-#Faire l'histo
-hist(length_unpredicted_algerae, length_predicted_algerae, "algerae")
-
-#Faire le bar_charts pour algerae
-bar_charts(complete_glimmer_algerae,(len(gene_predict('augustus/Proteomes_A.algerae_augustus'))-len(unclusterized_augustus_algerae)), (len(gene_predict('funannotate_algerae/Proteomes_A.algerae_funannotate'))- len(unclusterized_funannotate_algerae)), (len(gene_predict('glimmer/Proteomes_A.algerae_glimmer'))- len(unclusterized_glimmer_algerae)), (len(gene_predict('prodigal/Proteomes_A.algerae_prodigal'))- len(unclusterized_prodigal_algerae)), len(unclusterized_augustus_algerae), len(unclusterized_funannotate_algerae), len(unclusterized_glimmer_algerae), len(unclusterized_prodigal_algerae), "algerae")
-
-
-#Faire les feuilles csv
-stdout('GLIMMER', 'result_algerae/glimmer.csv', complete_glimmer_algerae, unclusterized_glimmer_algerae)		#Glimmer_algerae
-
-stdout('AUGUSTUS', 'result_algerae/augustus.csv', complete_augustus_algerae, unclusterized_augustus_algerae)		#Augustus_algerae
-stdout('FUNANNOTATE','result_algerae/funannotate.csv', complete_funannotate_algerae, unclusterized_funannotate_algerae)	#Funannotate_algerae
-stdout('PRODIGAL', 'result_algerae/prodigal.csv', complete_prodigal_algerae, unclusterized_prodigal_algerae)		#Prodigal_algerae
-
-
-#Print le bar_charts du nombre de gènes dans la base de données et le nombre de gènes prédits et clusterisé via les 4 outils
-#bar_charts_genes(len(complete_glimmer_algerae), (len(complete_glimmer_algerae)-len(liste_unpredicted_algerae)), "algerae")
-"""
-
+#=======================================PARISII=====================================
 print()
 print("===========================POUR PARISII==============================")
 print("Nombre total de gènes prédits par l'outil")
@@ -1200,13 +946,13 @@ dico_parisii = gene_predict('CDS_nematocida.fasta')
 
 ##Dico des gènes prédits juste par l'outil
 funannotate_parisii = gene_predict('funannotate_parisii/cluster_parisii_funannotate')
-glimmer_parisii = gene_predict('glimmer/cluster_parisii_glimmer')
-augustus_parisii = gene_predict('augustus/cluster_parisii_augustus')
-prodigal_parisii = gene_predict('prodigal/cluster_parisii_prodigal')
+glimmer_parisii     = gene_predict('glimmer/cluster_parisii_glimmer')
+augustus_parisii    = gene_predict('augustus/cluster_parisii_augustus')
+prodigal_parisii    = gene_predict('prodigal/cluster_parisii_prodigal')
 
 ##Création des dicos qui contiennent tous les clusters pour bieneusi
 funannotate_parisii_cluster = parse_cdhit("funannotate_parisii/cluster_parisii_funannotate.clstr")
-glimmer_parisii_cluster       = parse_cdhit("glimmer/cluster_parisii_glimmer.clstr")
+glimmer_parisii_cluster     = parse_cdhit("glimmer/cluster_parisii_glimmer.clstr")
 augustus_parisii_cluster    = parse_cdhit("augustus/cluster_parisii_augustus.clstr")
 prodigal_parisii_cluster    = parse_cdhit("prodigal/cluster_parisii_prodigal.clstr")
 
@@ -1214,15 +960,15 @@ prodigal_parisii_cluster    = parse_cdhit("prodigal/cluster_parisii_prodigal.cls
 
 #Les deuxième cluster contenant les gènes non clusterisés la première fois mais clusterisé la seconde
 funannotate_parisii_supcluster   = parse_cdhit("funannotate_parisii/cluster_supparisii_funannotate.clstr")
-glimmer_parisii_supcluster 	  = parse_cdhit("glimmer/cluster_supparisii_glimmer.clstr")
-augustus_parisii_supcluster 	  = parse_cdhit("augustus/cluster_supparisii_augustus.clstr")
-prodigal_parisii_supcluster 	  = parse_cdhit("prodigal/cluster_supparisii_prodigal.clstr")
+glimmer_parisii_supcluster 	 = parse_cdhit("glimmer/cluster_supparisii_glimmer.clstr")
+augustus_parisii_supcluster 	 = parse_cdhit("augustus/cluster_supparisii_augustus.clstr")
+prodigal_parisii_supcluster 	 = parse_cdhit("prodigal/cluster_supparisii_prodigal.clstr")
 
 #Création des dico complet (contenant l'ensemble des gènes clusterisé)
 complete_funannotate_parisii = combined_dico(funannotate_parisii_cluster, funannotate_parisii_supcluster)
-complete_glimmer_parisii = combined_dico(glimmer_parisii_cluster, glimmer_parisii_supcluster)
-complete_augustus_parisii = combined_dico(augustus_parisii_cluster,augustus_parisii_supcluster)
-complete_prodigal_parisii = combined_dico(prodigal_parisii_cluster,prodigal_parisii_supcluster)
+complete_glimmer_parisii     = combined_dico(glimmer_parisii_cluster, glimmer_parisii_supcluster)
+complete_augustus_parisii    = combined_dico(augustus_parisii_cluster,augustus_parisii_supcluster)
+complete_prodigal_parisii    = combined_dico(prodigal_parisii_cluster,prodigal_parisii_supcluster)
 
 
 #Compter le nombre de clusters 
@@ -1334,12 +1080,172 @@ bar_charts(complete_glimmer_parisii,(len(gene_predict('augustus/Proteomes_N.pari
 
 #Faire les feuilles csv
 stdout('GLIMMER', 'result_parisii/glimmer.csv', complete_glimmer_parisii, unclusterized_glimmer_parisii)		#Glimmer_parisii
-
 stdout('AUGUSTUS', 'result_parisii/augustus.csv', complete_augustus_parisii, unclusterized_augustus_parisii)		#Augustus_parisii
 stdout('FUNANNOTATE','result_parisii/funannotate.csv', complete_funannotate_parisii, unclusterized_funannotate_parisii)	#Funannotate_parisii
 stdout('PRODIGAL', 'result_parisii/prodigal.csv', complete_prodigal_parisii, unclusterized_prodigal_parisii)		#Prodigal_parisii
 
 #Print le bar_charts du nombre de gènes dans la base de données et le nombre de gènes prédits et clusterisé via les 4 outils
 bar_charts_genes(len(complete_glimmer_parisii), (len(complete_glimmer_parisii)-len(liste_unpredicted_parisii)), "parisii")
+
+#===========================================ALGERAE===========================================================
+#RAPPEL POUR ALGERAE JE N'AI PAS DE FICHIER FUNANNOTATE DONC SEULEMENT UNE PARTIE DU SCRIPT VA FONCTIONNER POUR LUI 
+print()
+print("===========================POUR ALGERAE==============================")
+print("Nombre total de gènes prédits par l'outil")
+#print("Funannotate :", len(gene_predict('funannotate_algerae/Proteomes_A.algerae_funannotate')))
+print("Glimmer :", len(gene_predict('glimmer/Proteomes_A.algerae_glimmer')))
+print("Augustus :", len(gene_predict('augustus/Proteomes_A.algerae_augustus')))
+print("Prodigal :", len(gene_predict('prodigal/Proteomes_A.algerae_prodigal')))
+print()
+
+##Dico des bases de données clean de microannot
+dico_algerae = gene_predict('Proteomes_A.algerae.txt')
+
+##Dico des gènes prédits juste par l'outil
+#funannotate_algerae = gene_predict('funannotate_algerae/cluster_algerae_funannotate')
+glimmer_algerae = gene_predict('glimmer/cluster_algerae_glimmer')
+augustus_algerae = gene_predict('augustus/cluster_algerae_augustus')
+prodigal_algerae = gene_predict('prodigal/cluster_algerae_prodigal')
+
+##Création des dicos qui contiennent tous les clusters pour bieneusi
+#funannotate_algerae_cluster = parse_cdhit("funannotate_algerae/cluster_algerae_funannotate.clstr")
+glimmer_algerae_cluster       = parse_cdhit("glimmer/cluster_algerae_glimmer.clstr")
+augustus_algerae_cluster    = parse_cdhit("augustus/cluster_algerae_augustus.clstr")
+prodigal_algerae_cluster    = parse_cdhit("prodigal/cluster_algerae_prodigal.clstr")
+
+
+#Les deuxième cluster contenant les gènes non clusterisés la première fois mais clusterisé la seconde
+#funannotate_algerae_supcluster   = parse_cdhit("funannotate_algerae/cluster_supalgerae_funannotate.clstr")
+glimmer_algerae_supcluster 	  = parse_cdhit("glimmer/cluster_supalgerae_glimmer.clstr")
+augustus_algerae_supcluster 	  = parse_cdhit("augustus/cluster_supalgerae_augustus.clstr")
+prodigal_algerae_supcluster 	  = parse_cdhit("prodigal/cluster_supalgerae_prodigal.clstr")
+
+#Création des dico complet (contenant l'ensemble des gènes clusterisé)
+#complete_funannotate_algerae = combined_dico(funannotate_algerae_cluster, funannotate_algerae_supcluster)
+complete_glimmer_algerae = combined_dico(glimmer_algerae_cluster, glimmer_algerae_supcluster)
+complete_augustus_algerae = combined_dico(augustus_algerae_cluster,augustus_algerae_supcluster)
+complete_prodigal_algerae = combined_dico(prodigal_algerae_cluster,prodigal_algerae_supcluster)
+
+
+#Compter le nombre de clusters 
+print("Nombre de clusters > 1 :")
+#print("Funannotate_algerae :", compt_gene(complete_funannotate_algerae))
+print("Glimmer_algerae :", compt_gene(complete_glimmer_algerae))
+print("Augustus_algerae :", compt_gene(complete_augustus_algerae))
+print("Prodigal_algerae :", compt_gene(complete_prodigal_algerae))
+
+##Pourcentage de gènes trouvés par rapport à microannot
+print()
+print("Gènes prédits et clusterisés (%) par rapport à microannot :") 	#Correspond au nombre de clusters > 1 prédit sur le nombre de cluster total (nb de gènes prédits par Microannot = 1978)
+#print("Funannotate_algerae :",(compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100)	
+print("Glimmer_algerae :",(compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100)	
+print("Augustus_algerae :",(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100)
+print("Prodigal_algerae :",(compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100)
+
+print()
+print("% gènes prédits à l'identique par l'outil ") #Correspond au nombre de clusters > 1 prédit qui ont la même longueur sur le nombre de cluster total (nb de gènes prédits par Microannot = 1978)
+#print("Funannotate_algerae :",same_gene(funannotate_algerae_cluster)/len(funannotate_algerae_cluster)*100)
+print("Glimmer_algerae :",same_gene(glimmer_algerae_cluster)/len(glimmer_algerae_cluster)*100)	
+print("Augustus_algerae :",same_gene(augustus_algerae_cluster)/len(augustus_algerae_cluster)*100)
+print("Prodigal_algerae :",same_gene(prodigal_algerae_cluster)/len(prodigal_algerae_cluster)*100)
+
+
+
+print()
+print("% gènes prédits mais pas identique ") # Nombre de gènes correctement prédits - Nombre de gènes prédits et clusterisés 
+#print("Funannotate_algerae :",(compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100 -same_gene(funannotate_algerae_cluster)/len(funannotate_algerae_cluster)*100)	
+print("Glimmer_algerae :",(compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100 - same_gene(glimmer_algerae_cluster)/len(glimmer_algerae_cluster)*100)	
+print("Augustus_algerae :",(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100 -same_gene(augustus_algerae_cluster)/len(augustus_algerae_cluster)*100)
+print("Prodigal_algerae :",(compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100 -same_gene(prodigal_algerae_cluster)/len(prodigal_algerae_cluster)*100)
+
+
+print()
+print("% gènes correct non prédits par l'outil ")# 100 - nombres de gènes prédits et clusterisés 
+#print("Funannotate_algerae :",100- (compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100)
+print("Glimmer_algerae :",100- (compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100)	
+print("Augustus_algerae :", 100 -(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100)
+print("Prodigal_algerae :", 100 -(compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100)
+print()
+
+
+#Faire les pie charts pour algerae :
+
+#pie(100- (compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100, (compt_gene(complete_funannotate_algerae))/len(funannotate_algerae_cluster)*100 -same_gene(funannotate_algerae_cluster)/len(funannotate_algerae_cluster)*100, same_gene(funannotate_algerae_cluster)/len(funannotate_algerae_cluster)*100, "Funannotate", "algerae")	#Faire le graphique de funannotate_cuniculi
+
+pie(100- (compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100, (compt_gene(complete_glimmer_algerae))/len(glimmer_algerae_cluster)*100 - same_gene(glimmer_algerae_cluster)/len(glimmer_algerae_cluster)*100, same_gene(glimmer_algerae_cluster)/len(glimmer_algerae_cluster)*100, "Glimmer", "algerae")
+
+pie(100 -(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100,(compt_gene(complete_augustus_algerae))/len(augustus_algerae_cluster)*100 -same_gene(augustus_algerae_cluster)/len(augustus_algerae_cluster)*100, same_gene(augustus_algerae_cluster)/len(augustus_algerae_cluster)*100, "Augustus", "algerae")
+
+pie(100 -(compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100, (compt_gene(complete_prodigal_algerae))/len(prodigal_algerae_cluster)*100 -same_gene(prodigal_algerae_cluster)/len(prodigal_algerae_cluster)*100, same_gene(prodigal_algerae_cluster)/len(prodigal_algerae_cluster)*100, "Prodigal", "algerae")
+
+#/!\ WARNING /!\
+#PARTIE IMPOSSIBLE A CONTINUER SANS FUNANNOTATE
+#/!\ WARNING /!\
+"""
+#combined_pie('algerae')
+
+#Maintenant je récupère les gènes prédits par tous les outils et ceux jamais prédits
+#J'associe mes listes pour algerae
+predicted_funannotate_algerae, unpredicted_funannotate_algerae = predicted_genes(complete_funannotate_algerae)
+predicted_glimmer_algerae, unpredicted_glimmer_algerae = predicted_genes(complete_glimmer_algerae)	
+predicted_augustus_algerae, unpredicted_augustus_algerae = predicted_genes(complete_augustus_algerae)
+predicted_prodigal_algerae, unpredicted_prodigal_algerae = predicted_genes(complete_prodigal_algerae)
+
+
+
+#Faire le diagramme de Venn
+venn_tools(predicted_augustus_algerae, predicted_funannotate_algerae, predicted_glimmer_algerae, predicted_prodigal_algerae, "algerae")
+
+
+#Récupérer les gènes prédits par les différents outils qui n'ont jamais était clusterisés
+unclusterized_funannotate_algerae = unclusterized(funannotate_algerae_supcluster)
+unclusterized_glimmer_algerae = unclusterized(glimmer_algerae_supcluster)
+unclusterized_augustus_algerae = unclusterized(augustus_algerae_supcluster))
+unclusterized_prodigal_algerae = unclusterized(prodigal_algerae_supcluster)
+
+#Trouver les gènes de la base de données qui n'ont jamais été clusterisé
+#Je stock le nom de ces gènes dans 
+unpredicted_genes_algerae = open("result_algerae/unpredicted_genes_algerae", 'w') 
+
+for gene in unpredicted_genes(unpredicted_augustus_algerae,unpredicted_funannotate_algerae, unpredicted_glimmer_algerae, unpredicted_prodigal_algerae):
+	print(gene, file=unpredicted_genes_algerae)
+	
+#Je stock les gènes non prédits dans cette liste 	
+liste_unpredicted_algerae = unpredicted_genes(unpredicted_augustus_algerae,unpredicted_funannotate_algerae, unpredicted_glimmer_algerae, unpredicted_prodigal_algerae)
+
+#Je peux également me servir de cette fonction pour garder uniquement les gènes prédits par tous les outils:
+
+predicted_genes_algerae = open("result_algerae/predicted_genes_algerae", 'w') 
+
+for gene in unpredicted_genes(predicted_augustus_algerae, predicted_funannotate_algerae, predicted_glimmer_algerae, predicted_prodigal_algerae):
+	print(gene, file=predicted_genes_algerae)
+	
+#Je stock les gènes prédits dans cette liste 	
+liste_predicted_algerae = unpredicted_genes(predicted_augustus_algerae, predicted_funannotate_algerae, predicted_glimmer_algerae, predicted_prodigal_algerae)
+
+#Pour créer mon histogramme j'ai besoin des listes des tailles	
+length_unpredicted_algerae = compt_length(liste_unpredicted_algerae)	#Liste des tailles de gènes non prédits
+length_predicted_algerae = compt_length(liste_predicted_algerae)	#Liste des tailles de gènes prédits par les 4 outils 
+
+#Faire l'histo
+hist(length_unpredicted_algerae, length_predicted_algerae, "algerae")
+
+#Faire le bar_charts pour algerae
+bar_charts(complete_glimmer_algerae,(len(gene_predict('augustus/Proteomes_A.algerae_augustus'))-len(unclusterized_augustus_algerae)), (len(gene_predict('funannotate_algerae/Proteomes_A.algerae_funannotate'))- len(unclusterized_funannotate_algerae)), (len(gene_predict('glimmer/Proteomes_A.algerae_glimmer'))- len(unclusterized_glimmer_algerae)), (len(gene_predict('prodigal/Proteomes_A.algerae_prodigal'))- len(unclusterized_prodigal_algerae)), len(unclusterized_augustus_algerae), len(unclusterized_funannotate_algerae), len(unclusterized_glimmer_algerae), len(unclusterized_prodigal_algerae), "algerae")
+
+
+#Faire les feuilles csv
+stdout('GLIMMER', 'result_algerae/glimmer.csv', complete_glimmer_algerae, unclusterized_glimmer_algerae)		#Glimmer_algerae
+
+stdout('AUGUSTUS', 'result_algerae/augustus.csv', complete_augustus_algerae, unclusterized_augustus_algerae)		#Augustus_algerae
+stdout('FUNANNOTATE','result_algerae/funannotate.csv', complete_funannotate_algerae, unclusterized_funannotate_algerae)	#Funannotate_algerae
+stdout('PRODIGAL', 'result_algerae/prodigal.csv', complete_prodigal_algerae, unclusterized_prodigal_algerae)		#Prodigal_algerae
+
+
+#Print le bar_charts du nombre de gènes dans la base de données et le nombre de gènes prédits et clusterisé via les 4 outils
+#bar_charts_genes(len(complete_glimmer_algerae), (len(complete_glimmer_algerae)-len(liste_unpredicted_algerae)), "algerae")
+"""
+
+
 
 
