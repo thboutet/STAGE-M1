@@ -39,7 +39,7 @@ def dna_to_protein(dna_seq):
     
 
 
-#Fonction pour créer des dicos de mes génomes 
+#Fonction pour créer des dicos avec les fichiers d'entrainement (clefs = >nom, valeur = sequence en nt) 
 def dico_aa (file) :
 	dico_aa = defaultdict(str)
 	with open (file,'r') as f1 :
@@ -52,7 +52,7 @@ def dico_aa (file) :
 				dico_aa[chromosome] += dna_to_protein(lig.upper())    #J'applique la fonction pour directement récupérer des séquences protéiques et non en nt 
 	return dico_aa
 
-#Dico des génomes en aa : 
+#Créer les dicos via la fonction dico_aa pour mes fichiers d'entrainement (ils sont en nt pour l'instant)
 dico_aa_cuniculi = dico_aa('data_training_sur_e_cuniculi.fa')
 dico_aa_algerae = dico_aa('data_training_A_algerae')
 dico_aa_bieneusi = dico_aa('data_training_E_bieneusi')
@@ -60,14 +60,13 @@ dico_aa_ceranae = dico_aa('data_training_Nosmea_ceranae')
 dico_aa_parisii = dico_aa('data_training_parissi.fr')
 
 
+
 ##POUR CUNICULI 
-
-prot_cuniculi= open("data_training_prot_cuniculi", 'w')
+prot_cuniculi= open("data_training_prot_cuniculi", 'w')		#Créer un nouveau fichier pour contenir les séquences en aa
 for id, seq in dico_aa_cuniculi.items():
-	print(f">{id}", file = prot_cuniculi)		
-	for i in range(0, len(seq), 60):		
-		print(seq[i:i+60], file = prot_cuniculi)
-
+	print(f">{id}", file = prot_cuniculi)			#Je garde le nom de l'id que je print dans le nouveau fichier		
+	for i in range(0, len(seq), 60):			#Stocker 60 aa par ligne
+		print(seq[i:i+60], file = prot_cuniculi)	#Print les séquences correspondant à l'id en aa
 
 
 ##POUR ALGERAE	
@@ -78,9 +77,7 @@ for id, seq in dico_aa_algerae.items():
 	for i in range(0, len(seq), 60):		
 		print(seq[i:i+60], file = prot_algerae)
 
-		
-
-		
+				
 #POUR BIENEUSI		
 prot_bieneusi= open("data_training_prot_bieneusi", 'w')
 
