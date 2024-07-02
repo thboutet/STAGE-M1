@@ -29,34 +29,34 @@ To use the tools correctly we need a fasta file of the complete genome of micros
 We also need a data training file generated via Microannot
 (All these files are given in this github)
 
-## INSTALL GLIMMER
+## 2.1.1 INSTALL GLIMMER
 ```
 conda install glimmer
 ```
 
-## TRAIN GLIMMER 
+## 2.1.2 TRAIN GLIMMER 
 ```
 build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa  
 ```   
 => Creation of the training data file for cuniculi 
-## RUN GLIMMER (option = codon start : ATG, gene length > 240 nt)
+## 2.1.3 RUN GLIMMER (option = codon start : ATG, gene length > 240 nt)
 ```
 glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimmer/result_E.cuniculi
 ```
 
-## CONVERT TO GFF 
+## 2.1.4 CONVERT TO GFF 
 Here I use the script "glimmer/Script_gff.py" on the output ('glimmer/result_E.cuniculi.predict') to get a gff file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/glimmer/Script_gff.py).
 
-## INSTALL PRODIGAL
+## 2.2.1 INSTALL PRODIGAL
 ```
 conda install prodigal
 ```
-## TRAIN A NEW SPECIES
+## 2.2.2 TRAIN A NEW SPECIES
 ```
 prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur_e_cuniculi.trn -p single 
 ```
-## RUN PRODIGAL 
+## 2.2.3 RUN PRODIGAL 
 ```
 prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cuniculi.trn -f gff > prodigal/result_E.cuniculi
 ```
@@ -64,14 +64,14 @@ prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cunicul
 > Prodigal does not allow to choose the size of the genes so I will treat the results later with "script_genes.py".
 
 
-## INSTALL AUGUSTUS 
+## 2.3.1 INSTALL AUGUSTUS 
 ```
 conda install augustus  
 ```
 > [!WARNING]
 > Here you may have problems with "scipio.py", so you will also have to download this script and put it in the directory indicated by the error returned by augustus.
 
-## TRAIN A NEW SPECIES
+## 2.3.2 TRAIN A NEW SPECIES
 
 To train augustus, we must create a new species. For this we need the genome and the proteins predicted for it. For cuniculi, the data training contains proteins from the other microsporidia annotated on Microannot  (_Nosema ceranae_, _Enterocytozoon bieneusi_ and _Anncaliia algerae_). It will therefore be necessary to create a genome corresponding to all these proteins.
 ```
@@ -85,12 +85,12 @@ trainingset=data_training_prot_cuniculi
 > [!IMPORTANT]
 > The data training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_aa.py).
-## RUN AUGUSTUS 
+## 2.3.3 RUN AUGUSTUS 
 ```
 augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromCDS=False --predictionStart=ATG genome_complet/E_cuniculi.fna > augustus/result_E.cuniculi_augustus.gff
 ```
 
-## INSTALL FUNANNOTATE 
+## 2.4.1 INSTALL FUNANNOTATE 
 ```
 docker pull nextgenusfs/funannotate
 
@@ -109,12 +109,12 @@ source ~/.bashrc
 > [!WARNING]
 > Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes or don't run).
 
-Transform the gff from augustus to gff3 so that funannotate can read it 
+## 2.4.2 TRANSFORM THE GFF FROM AUGUSTUS TO GFF3 SO THAT FUNANNOTATE CAN READ IT
 ```
 gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cuniculi_augustus.gff > augustus/cuniculi_out.gff3       
 ```
 
-## RUN FUNANNOTATE
+## 2.4.3 RUN FUNANNOTATE
 ```
 ./funannotate-docker predict -i genome_complet/E_cuniculi.fna -o funannotate -s "E.cuniculi" --augustus_gff augustus/cuniculi_out.gff3 --max_intronlen 0 --cpus 8
 ```
@@ -129,11 +129,11 @@ You can find the script [here]
 # STEP 4 : CLUSTER (EXAMPLE FOR _E.CUNICULI_)
 In this step I will make two clusters to see if the genes predicted by my tools correspond to the genes of the initial database
 
-## CD-HIT
+## 4.1 CD-HIT
 ```
 conda install cd-hit
 ```
-## GLIMMER 
+## 4.2 GLIMMER 
 Cluster 1 : database VS predict genes  
 ```
 cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 glimmer/Proteomes_E.cuniculi_glimmer -d 0 -o glimmer/cluster_prot100_glimmer -c 1 -A 1 
@@ -145,7 +145,7 @@ cd-hit-2d -i glimmer/cluster_prot100_glimmer -i2 Proteomes_E.cuniculi.txt -d 0 -
 > [!NOTE]
 > Doing this two clusters allows to really find all the genes that need to be clustered 
 
-## PRODIGAL
+## 4.3 PRODIGAL
 Cluster 1 : database VS predict genes  
 ```
 cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 prodigal/Proteomes_E.cuniculi_prodigal -d 0 -o prodigal/cluster_prot100_prodigal -c 1 -A 1 
@@ -154,7 +154,7 @@ Cluster 2 : unclusterized genes from cluster 1 VS database
 ```
 cd-hit-2d -i prodigal/cluster_prot100_prodigal -i2 Proteomes_E.cuniculi.txt -d 0 -o glimmer/cluster_supprot100_prodigal -c 0.9 
 ```
-## AUGUSTUS
+## 4.4 AUGUSTUS
 Cluster 1 : database VS predict genes  
 ```
 cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 augustus/Proteomes_E.cuniculi_augustus -d 0 -o augustus/cluster_prot100_augustus -c 1 -A 1 
@@ -163,7 +163,7 @@ Cluster 2 : unclusterized genes from cluster 1 VS database
 ```
 cd-hit-2d -i augustus/cluster_prot100_augustus -i2 Proteomes_E.cuniculi.txt -d 0 -o augustus/cluster_supprot100_augustus -c 0.9 
 ```
-## FUNANNOTATE
+## 4.5  FUNANNOTATE
 Cluster 1 : database VS predict genes  
 ```
 cd-hit-2d -i Proteomes_E.cuniculi.txt -i2 funannotate/Proteomes_E.cuniculi_funannotate -d 0 -o funannotate/cluster_prot100_funannotate -c 1 -A 1 
