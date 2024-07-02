@@ -45,7 +45,7 @@ glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimme
 ```
 
 ## CONVERT TO GFF 
-Here I use the script "glimmer/Script_gff.py" on the output ('glimmer/result_E.cuniculi.predict') to get a gff file 
+Here I use the script "glimmer/Script_gff.py" on the output ('glimmer/result_E.cuniculi.predict') to get a gff file.
 
 
 ## INSTALL PRODIGAL
@@ -84,6 +84,7 @@ trainingset=data_training_prot_cuniculi
 ```
 > [!NOTE]
 > The data_training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
+You can see the script [here](
 ## RUN AUGUSTUS 
 ```
 augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromCDS=False --predictionStart=ATG genome_complet/E_cuniculi.fna > augustus/result_E.cuniculi_augustus.gff
