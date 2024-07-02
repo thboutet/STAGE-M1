@@ -73,7 +73,7 @@ conda install augustus
 
 ## TRAIN A NEW SPECIES
 
-To train augustus, we must create a new species. For this we need the genome and the proteins predicted for it. For cuniculi, the data training contains proteins from the other microsporidia annotated on Microannot  _Nosema ceranae_, _Enterocytozoon bieneusi_ and _Anncaliia algerae_). It will therefore be worth creating a genome corresponding to all these proteins.
+To train augustus, we must create a new species. For this we need the genome and the proteins predicted for it. For cuniculi, the data training contains proteins from the other microsporidia annotated on Microannot  (_Nosema ceranae_, _Enterocytozoon bieneusi_ and _Anncaliia algerae_). It will therefore be necessary to create a genome corresponding to all these proteins.
 ```
 cat genome_complet/A_algerae.fna genome_complet/E_bieneusi.fna genome_complet/N_ceranae.fna > genome_complet/all_genome_clear_cuniculi
 ```
@@ -82,7 +82,7 @@ Then we train it :
 autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --
 trainingset=data_training_prot_cuniculi  
 ```
-> [!NOTE]
+> [!IMPORTANT]
 > The data training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_aa.py).
 ## RUN AUGUSTUS 
