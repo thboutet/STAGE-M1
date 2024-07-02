@@ -891,7 +891,8 @@ for chromosome, gene_data in dict_funannotate_parisii.items() :			#Pour chaque g
 			print(f">{chromosome[:-2]}:{start}-{stop}({brin})", file = funannotate_parisii)
 			for i in range(0, len(gene_seq), 60):		
 				print(gene_seq[i:i+60], file = funannotate_parisii)	
-													
+
+ 	 ```
 </details>
 
 # STEP 4 : CLUSTER (EXAMPLE FOR _E.CUNICULI_)
