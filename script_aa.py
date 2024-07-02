@@ -27,11 +27,11 @@ def dna_to_protein(dna_seq):
         codon = dna_seq[i:i+3]		#Je créer mes groupes de 3 nt 
         if codon in codon_table:
             aa = codon_table[codon]	#Je cherche si mes 3 nt ont une correspondances en a.a
-            if aa == '_':  		# Si codon stop j'arrête
+            if aa == '_':  		# Si codon stop j'arrête la fonction 
                 break
-            protein_seq += aa
+            protein_seq += aa		# Sinon j'ajoute l'a.a
         else:
-            protein_seq += 'X'  	#Si le codon n'est pas dans la table des codons alors je print X
+            protein_seq += 'X'  	# Si le codon n'est pas dans la table des codons alors je print X
         
     return protein_seq
     
@@ -39,7 +39,7 @@ def dna_to_protein(dna_seq):
     
 
 
-#Fonction pour créer des dicos avec les fichiers d'entrainement (clefs = >nom, valeur = sequence en nt) 
+#Fonction pour créer des dicos avec les fichiers d'entrainement (clefs = '>nom', valeur = sequence en nt) 
 def dico_aa (file) :
 	dico_aa = defaultdict(str)
 	with open (file,'r') as f1 :
@@ -68,7 +68,7 @@ for id, seq in dico_aa_cuniculi.items():
 	for i in range(0, len(seq), 60):			#Stocker 60 aa par ligne
 		print(seq[i:i+60], file = prot_cuniculi)	#Print les séquences correspondant à l'id en aa
 
-
+#Même chose pour les autres microsporidies
 ##POUR ALGERAE	
 prot_algerae= open("data_training_prot_algerae", 'w')
 
