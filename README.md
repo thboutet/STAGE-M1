@@ -70,15 +70,15 @@ prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cunicul
 conda install augustus  
 ```
 > [!WARNING]
-> Here you may have problems with "scipio.py", so you will also have to download this script and put it in the directory indicated by the error returned by augustus
+> Here you may have problems with "scipio.py", so you will also have to download this script and put it in the directory indicated by the error returned by augustus.
 
 ## TRAIN A NEW SPECIES
 > [!NOTE]
-> To train augustus, we must create a new species. For this we need the genome and the proteins predicted for it. For cuniculi, the data training contains proteins from the other microsporidia annotated on Microannot  _Nosema ceranae_, _Enterocytozoon bieneusi_ and _Anncaliia algerae_). It will therefore be worth creating a genome corresponding to all these proteins
+> To train augustus, we must create a new species. For this we need the genome and the proteins predicted for it. For cuniculi, the data training contains proteins from the other microsporidia annotated on Microannot  _Nosema ceranae_, _Enterocytozoon bieneusi_ and _Anncaliia algerae_). It will therefore be worth creating a genome corresponding to all these proteins.
 ```
 cat genome_complet/A_algerae.fna genome_complet/E_bieneusi.fna genome_complet/N_ceranae.fna > genome_complet/all_genome_clear_cuniculi
 ```
-Then we train the new species
+Then we train it :
 ```
 autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --
 trainingset=data_training_prot_cuniculi  
@@ -99,7 +99,7 @@ wget -O funannotate-docker https://raw.githubusercontent.com/nextgenusfs/funanno
 chmod +x funannotate-docker
 ```
 ```
-./funannotate-docker setup -d db/            #Repertory for the funannotate database 
+./funannotate-docker setup -d db/           
 ```
 ```
 nano ~/.bashrc  
@@ -107,7 +107,7 @@ export FUNANNOTATE_DB=/home/path/to/db
 source ~/.bashrc
 ```
 > [!WARNING]
-> Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes).
+> Funannotate will often produce bugs. The only way to train him I found is to reused the gff file produced by augustus. (When I gave him the protein training file he predicted only a hundred genes or don't run).
 
 ```
 gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cuniculi_augustus.gff > augustus/cuniculi_out.gff3       
