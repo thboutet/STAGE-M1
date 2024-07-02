@@ -1,8 +1,14 @@
+#Package nécessaire à installer
+"""
+pip install pandas
+pip install matplotlib
+pip install numpy
+pip install venny4py
+"""
+
 import pandas as pd 			#pandas pour traiter les fichiers ods
-import pyexcel_ods3 as ods		#modifier des fichiers ods avec python 
 import matplotlib.pyplot as plt		#Pour bar charts
 import numpy as np			#Pour données du bar charts 
-import re 				#Pour différencier les types d'erreurs
 from venny4py.venny4py import *		#Diagramme de Venn
 
 
