@@ -171,26 +171,26 @@ cd-hit-2d -i funannotate/cluster_prot100_funannotate -i2 Proteomes_E.cuniculi.tx
 
 To process my results I use the "script_cluster.py"
 This will create "result_microsporidia" files which contain :  
-- Pie charts on the predictions of the 4 tools ('Pie')
+- Pie charts on the predictions of the 4 tools ('Pie') :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/d52dd62d-f00e-4656-b5f8-d34f76cb15ae" width=125% height=125%>
 </p>
 
-- A bar charts that compares the set of genes predicted by the set of tools with those of the initial database ('Bar/database_VS_4tools_microsporidia.png')
+- A bar charts that compares the set of genes predicted by the set of tools with those of the initial database ('Bar/database_VS_4tools_microsporidia.png') :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/8343457f-0623-4c43-a3f3-1dd5052ef98e">
 </p>
  
-- An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png')
+- An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png') :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/a71a0236-d149-462a-9d89-75a48219493e">
 </p>
 
-- A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia')
+- A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia') :
 file:///home/thomas/Stage/Database/result_cuniculi/Histogram/cuniculi.png
 
   
-- A Venn Diagramms which represents the clustered genes for all tools  ('Venn/all_tools_microsporidia.png')
+- A Venn Diagramms which represents the clustered genes for all tools  ('Venn/all_tools_microsporidia.png') :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/34d0d604-6741-4f2d-8623-0aa54d0482ec" width=75% height=75%>
 </p>
@@ -200,12 +200,12 @@ file:///home/thomas/Stage/Database/result_cuniculi/Histogram/cuniculi.png
 - Csv sheets (one per tool) that will show the different clusters and whether the database genes are predicted correctly, predicted with an error (indication of the type of error), or not predicted. The false positives of the tool will also be indicated. I concatenate these sheets to create a file "MICROSPORIDIA.ods"
 
 #### I complete these results using another script: "script_pandas.py" :
- - An other Venn Diagramm which represents clustered and correct genes for all tools ('Venn/Correct_genes_microsporidia.png')
+ - An other Venn Diagramm which represents clustered and correct genes for all tools : ('Venn/Correct_genes_microsporidia.png')
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/70cd21e9-cda1-4b99-a682-259f12f06e96" width=75% height=75% >
 </p>
 
- - Two bar charts of errors made in gene prediction,  100% standardized ('Bar/microsporidia100%.png') and number of errors ('Bar/microsporidia.png')
+ - Two bar charts of errors made in gene prediction,  100% standardized ('Bar/microsporidia100%.png') and number of errors ('Bar/microsporidia.png') :
 
 <p align="center">
 
