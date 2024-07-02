@@ -78,7 +78,7 @@ conda install augustus
 ```
 cat genome_complet/A_algerae.fna genome_complet/E_bieneusi.fna genome_complet/N_ceranae.fna > genome_complet/all_genome_clear_cuniculi
 ```
-
+Then we train the new species
 ```
 autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --
 trainingset=data_training_prot_cuniculi  
