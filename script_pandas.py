@@ -132,7 +132,7 @@ def bar (path, microsporidie) :
 #bar('result_parisii/PARISII.ods', 'parisii')
 
 def venn (path, microsporidie):
-	#Création des différents df (1 par outil)
+	#Création des différents dataframe (1 par outil)
 	df1 = pd.read_excel(path, sheet_name='augustus')
 	df2 = pd.read_excel(path, sheet_name='funannotate')
 	df3 = pd.read_excel(path, sheet_name='glimmer')
@@ -152,7 +152,7 @@ def venn (path, microsporidie):
 	liste_prod = df4[df4.columns[0]].tolist()
 
 
-	#Je attribue les listes des gènes correctement prédits à mes outils et je les transforme en set  
+	#J'attribue les listes des gènes correctement prédits à mes outils et je les transforme en set  
 	sets = {'Augustus': set(liste_aug),
 		'Funannotate' : set(liste_fun),
 		'Glimmer': set(liste_gli),
