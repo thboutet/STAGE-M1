@@ -48,7 +48,7 @@ glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimme
 ```
 
 ## 2.1.4 CONVERT TO GFF 
-Here I use the script "glimmer/Script_gff.py" on the output ('glimmer/result_E.cuniculi.predict') to get a gff file.
+Here I use the script **"glimmer/Script_gff.py"** on the output ('glimmer/result_E.cuniculi.predict') to get a gff file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/glimmer/Script_gff.py).
 
 ## 2.2.1 INSTALL PRODIGAL
@@ -64,7 +64,7 @@ prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur
 prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cuniculi.trn -f gff > prodigal/result_E.cuniculi
 ```
 > [!IMPORTANT]
-> Prodigal does not allow to choose the size of the genes so I will treat the results later with "script_genes.py".
+> Prodigal does not allow to choose the size of the genes so I will treat the results later with **"script_genes.py"**.
 
 
 ## 2.3.1 INSTALL AUGUSTUS 
@@ -86,7 +86,7 @@ autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_gen
 trainingset=data_training_prot_cuniculi  
 ```
 > [!IMPORTANT]
-> The data training is different, I used the "script.aa.py" in order to create a data training file with amino acid from the nucleotide base file.
+> The data training is different, I used the **"script.aa.py"** in order to create a data training file with amino acid from the nucleotide base file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_aa.py).
 ## 2.3.3 RUN AUGUSTUS 
 ```
@@ -147,7 +147,7 @@ Cluster 2 : unclusterized genes from cluster 1 VS database
 cd-hit-2d -i glimmer/cluster_prot100_glimmer -i2 Proteomes_E.cuniculi.txt -d 0 -o glimmer/cluster_supprot100_glimmer -c 0.9 
 ```
 > [!NOTE]
-> Doing this two clusters allows to really find all the genes that need to be clustered 
+> Doing this two clusters allows to really find all the genes that need to be clustered.
 
 ## 4.3 PRODIGAL
 Cluster 1 : database VS predict genes  
@@ -178,48 +178,48 @@ cd-hit-2d -i funannotate/cluster_prot100_funannotate -i2 Proteomes_E.cuniculi.tx
 ```
 # STEP 5 : OUTPUT THE RESULTS
 
-To process my results I use the "script_cluster.py"
+To process my results I use the **"script_cluster.py"**
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_cluster.py).
 This will create "result_microsporidia" files which contain :  
-- Pie charts on the predictions of the 4 tools ('Pie') :
+- Pie charts on the predictions of the 4 tools (**'Pie'**) :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/d52dd62d-f00e-4656-b5f8-d34f76cb15ae" width=125% height=125%>
 </p>
 
-- A bar charts that compares the set of genes predicted by the set of tools with those of the initial database ('Bar/database_VS_4tools_microsporidia.png') :
+- A bar charts that compares the set of genes predicted by the set of tools with those of the initial database (**'Bar/database_VS_4tools_microsporidia.png'**) :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/8343457f-0623-4c43-a3f3-1dd5052ef98e">
 </p>
  
-- An other bar charts which represents true positives and false positives ('Bar/prediction_microsporidia.png') :
+- An other bar charts which represents true positives and false positives (**'Bar/prediction_microsporidia.png'**) :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/a71a0236-d149-462a-9d89-75a48219493e">
 </p>
 
-- A histogram of the size of genes predicted and not predicted ('Histogram/microsporidia') :
+- A histogram of the size of genes predicted and not predicted (**'Histogram/microsporidia'**) :
 <p align="center">
 <img src= "https://github.com/thboutet/STAGE-M1/assets/174331140/787b71d7-5c25-4432-b762-58469e9bd2b5">
 </p>
 
   
-- A Venn Diagramms which represents the clustered genes for all tools  ('Venn/all_tools_microsporidia.png') :
+- A Venn Diagramms which represents the clustered genes for all tools  (**'Venn/all_tools_microsporidia.png'**) :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/34d0d604-6741-4f2d-8623-0aa54d0482ec" width=75% height=75%>
 </p>
 
-- The list of genes that are in the database but are never predicted ('unpredicted_genes_microsporidia')  
-- The list of genes that are predicted by all tools ('predicted_genes_microsporidia')  
-- Csv sheets (one per tool) that will show the different clusters and whether the database genes are predicted correctly, predicted with an error (indication of the type of error), or not predicted. The false positives of the tool will also be indicated. I concatenate these sheets to create a file "MICROSPORIDIA.ods"
+- The list of genes that are in the database but are never predicted (**'unpredicted_genes_microsporidia'**)  
+- The list of genes that are predicted by all tools (**'predicted_genes_microsporidia'**)  
+- Csv sheets (one per tool) that will show the different clusters and whether the database genes are predicted correctly, predicted with an error (indication of the type of error), or not predicted. The false positives of the tool will also be indicated. I concatenate these sheets to create a file "**MICROSPORIDIA.ods**"
 
 **I complete these results using another script: "script_pandas.py" :**  
 **You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_pandas.py).**
 
- - An other Venn Diagramm which represents clustered and correct genes for all tools ('Venn/Correct_genes_microsporidia.png') :
+ - An other Venn Diagramm which represents clustered and correct genes for all tools (**'Venn/Correct_genes_microsporidia.png'**) :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/70cd21e9-cda1-4b99-a682-259f12f06e96" width=75% height=75% >
 </p>
 
- - Two bar charts of errors made in gene prediction,  100% standardized ('Bar/microsporidia100%.png') and number of errors ('Bar/microsporidia.png') :
+ - Two bar charts of errors made in gene prediction,  100% standardized ('Bar/microsporidia100%.png') and number of errors (**'Bar/microsporidia.png'**) :
 
 <p align="center">
 
