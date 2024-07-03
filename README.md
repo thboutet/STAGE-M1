@@ -178,7 +178,7 @@ cd-hit-2d -i funannotate/cluster_prot100_funannotate -i2 Proteomes_E.cuniculi.tx
 
 To process my results I use the **"script_cluster.py"**
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_cluster.py).
-This will create "result_microsporidia" files which contain :  
+This will create "result_microsporidia" repertories which contain :  
 - Pie charts on the predictions of the 4 tools (**'Pie'**) :
 <p align="center">
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/d52dd62d-f00e-4656-b5f8-d34f76cb15ae" width=125% height=125%>
