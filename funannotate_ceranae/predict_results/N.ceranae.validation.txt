@@ -1,0 +1,1 @@
+WARNING: valid [SEQ_FEAT.ShortExon] Internal coding region exon is too short FEATURE: CDS: hypothetical protein [(lcl|contig5427:c7211-7179, c6492-6484, c3620-2931)] [lcl|contig5427: raw, dna len= 18336] -> [gnl|ncbi|FUN_001146-T1]
