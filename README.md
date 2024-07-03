@@ -28,8 +28,8 @@ conda activate micro
 ```
 
 # STEP 2 : USED THE TOOLS (EXAMPLE WITH _E.CUNICULI_)
-To use the tools correctly we need a fasta file of the complete genome of microsporidia (found on NCBI)
-We also need a data training file generated via Microannot
+To use the tools correctly we need a fasta file of the complete genome of microsporidia (found on NCBI).
+We also need a data training file generated via Microannot.
 (All these files are given in this github)
 
 ## 2.1.1 INSTALL GLIMMER
