@@ -42,11 +42,11 @@ Creation of the training data file for cuniculi
 ```
 build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa  
 ```   
-## 2.1.3 RUN GLIMMER (option = codon start : ATG, gene length > 240 nt)
+## 2.1.3 RUN GLIMMER 
+Options to put for predictions : intron : OFF, gene > 240 nt, codon start = ATG 
 ```
 glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimmer/result_E.cuniculi
 ```
-
 ## 2.1.4 CONVERT TO GFF 
 Here I use the script **"glimmer/Script_gff.py"** on the output ('glimmer/result_E.cuniculi.predict') to get a gff file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/glimmer/Script_gff.py).
