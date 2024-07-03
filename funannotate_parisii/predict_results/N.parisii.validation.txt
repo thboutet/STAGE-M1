@@ -1,0 +1,2 @@
+WARNING: valid [SEQ_FEAT.ShortExon] Internal coding region exon is too short FEATURE: CDS: hypothetical protein [(lcl|JH605024:595479-596190, 620447-620449, 702365-702369)] [lcl|JH605024: delta, dna len= 702476] -> [gnl|ncbi|FUN_000868-T1]
+WARNING: valid [SEQ_FEAT.ShortExon] Internal coding region exon is too short FEATURE: CDS: hypothetical protein [(lcl|JH605026:112079-112130, 112206-112281, 113360-113371, 122876-123326, 146611-148290)] [lcl|JH605026: delta, dna len= 538844] -> [gnl|ncbi|FUN_001178-T1]

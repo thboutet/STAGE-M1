@@ -1,0 +1,119 @@
+{
+    "format": "annotation",
+    "command": "/venv/bin/funannotate predict -i genome_complet/N_parisii.fna -o funannotate_test -s N.parisii --augustus_gff augustus/parisii_out.gff3 --max_intronlen 0 --cpus 8",
+    "organism": "N.parisii",
+    "software": {
+        "name": "funannotate",
+        "version": "1.8.17",
+        "date": "2024-07-02",
+        "resources": {
+            "merops": {
+                "type": "diamond",
+                "version": "12.0",
+                "date": "2017-10-04",
+                "num-records": "5009"
+            },
+            "uniprot": {
+                "type": "diamond",
+                "version": "2024_01",
+                "date": "2024-01-24",
+                "num-records": "570830"
+            },
+            "dbCAN": {
+                "type": "hmmer3",
+                "version": "12.0",
+                "date": "2023-08-02",
+                "num-records": "699"
+            },
+            "pfam": {
+                "type": "hmmer3",
+                "version": "36.0",
+                "date": "2023-07",
+                "num-records": "20795"
+            },
+            "repeats": {
+                "type": "diamond",
+                "version": "1.0",
+                "date": "2024-03-02",
+                "num-records": "11950"
+            },
+            "go": {
+                "type": "text",
+                "version": "2024-01-17",
+                "date": "2024-01-17",
+                "num-records": "47729"
+            },
+            "mibig": {
+                "type": "diamond",
+                "version": "1.4",
+                "date": "2024-03-02",
+                "num-records": "31023"
+            },
+            "interpro": {
+                "type": "xml",
+                "version": "98.0",
+                "date": "2024-01-25",
+                "num-records": "40768"
+            },
+            "busco_outgroups": {
+                "type": "outgroups",
+                "version": "1.0",
+                "date": "2024-03-02",
+                "num-records": "8"
+            },
+            "gene2product": {
+                "type": "text",
+                "version": "1.92",
+                "date": "2023-10-02",
+                "num-records": "34459"
+            }
+        }
+    },
+    "assembly": {
+        "num_contigs": 65,
+        "length": 4071348,
+        "mean_length": 62636.12,
+        "N50": 649561,
+        "L50": 3,
+        "N90": 165275,
+        "L90": 7,
+        "GC_content": 34.07
+    },
+    "annotation": {
+        "genes": 1815,
+        "common_name": 0,
+        "mRNA": 1781,
+        "tRNA": 34,
+        "ncRNA": 0,
+        "rRNA": 0,
+        "avg_gene_length": 1648.28,
+        "transcript-level": {
+            "CDS_transcripts": 1781,
+            "CDS_five_utr": 0,
+            "CDS_three_utr": 0,
+            "CDS_no_utr": 1781,
+            "CDS_five_three_utr": 0,
+            "CDS_complete": 1740,
+            "CDS_no-start": 18,
+            "CDS_no-stop": 23,
+            "CDS_no-start_no-stop": 0,
+            "total_exons": 1859,
+            "total_cds_exons": 1859,
+            "multiple_exon_transcript": 48,
+            "single_exon_transcript": 1733,
+            "avg_exon_length": 752.21,
+            "avg_protein_length": 401.57,
+            "functional": {
+                "go_terms": 0,
+                "interproscan": 0,
+                "eggnog": 0,
+                "pfam": 0,
+                "cazyme": 0,
+                "merops": 0,
+                "busco": 0,
+                "secretion": 0
+            },
+            "pct_exon_overlap_protein_evidence": 0.11
+        }
+    }
+}
