@@ -125,7 +125,7 @@ gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cunicul
 
 For this step I use the **script_gene.py** which will allow me to generate 2 files: 1 containing the CDS in nucleotide "microsporidia_CDS_tools" and the CDS in aa "Proteomes_microsporidia_tools"
 
-You can find the script [here] 											
+You can find the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_gene.py).								
 
 # STEP 4 : CLUSTER (EXAMPLE FOR _E.CUNICULI_)
 In this step I will make two clusters to see if the genes predicted by my tools correspond to the genes of the initial database
