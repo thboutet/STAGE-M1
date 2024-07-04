@@ -43,10 +43,12 @@ Creation of the training data file for cuniculi
 build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa  
 ```   
 ### 2.1.3 RUN GLIMMER 
-Options to put for predictions : intron : OFF, gene > 240 nt, codon start = ATG 
 ```
 glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimmer/result_E.cuniculi
 ```
+-g 240 : predict gene length > 240 nt  
+--start_codons atg : Codons starts must be ATG
+
 ### 2.1.4 CONVERT TO GFF 
 Here I use the script **"glimmer/Script_gff.py"** on the output ('glimmer/result_E.cuniculi.predict') to get a gff file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/glimmer/Script_gff.py).
@@ -63,6 +65,10 @@ prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur
 ```
 prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cuniculi.trn -f gff > prodigal/result_E.cuniculi
 ```
+-i : input genome file
+-t : input training file
+-f : format of output (gff)
+
 > [!IMPORTANT]
 > Prodigal does not allow to choose the size of the genes so I will treat the results later with **"script_genes.py"**.
 
@@ -85,6 +91,10 @@ Then we train it :
 autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --
 trainingset=data_training_prot_cuniculi  
 ```
+--species : name of the new species
+--genome : input genome file
+--trainingset : input training file 
+
 > [!IMPORTANT]
 > The data training is different, I used the **"script.aa.py"** in order to create a data training file with amino acid from the nucleotide base file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_aa.py).
