@@ -99,7 +99,7 @@ trainingset=data_training_prot_cuniculi
 **--trainingset** : input training file   
 
 > [!IMPORTANT]
-> The data training is different, I used the **"script.aa.py"** in order to create a data training file with amino acid from the nucleotide base file.
+> The data training is different, I used the **"script.aa.py"** in order to create a data training file with amino acids instead of nucleotides.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_aa.py).
 
 ### 2.3.3 RUN AUGUSTUS 
