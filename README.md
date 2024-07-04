@@ -47,7 +47,7 @@ build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa
 glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimmer/result_E.cuniculi
 ```
 **-g 240** : predict gene length > 240 nt  
-**--start_codons atg** : Codons starts must be ATG
+**--start_codons atg** : codons starts must be ATG
 
 ### 2.1.4 CONVERT TO GFF 
 Here I use the script **"glimmer/Script_gff.py"** on the output ('glimmer/result_E.cuniculi.predict') to get a gff file.
@@ -61,8 +61,8 @@ conda install prodigal
 ```
 prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur_e_cuniculi.trn -p single 
 ```
-**-i** : input training file
-**-t** : name the training file to use with prodigal
+**-i** : input training file  
+**-t** : name the training file to use with prodigal  
 
 ### 2.2.3 RUN PRODIGAL 
 ```
@@ -108,8 +108,8 @@ augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromC
 ```
 **--species** : reuse the species create with autoAugTrain.pl  
 **--introns=off** : disable intron prediction  
-**--stopCodonExcludedFromCDS=False** : Keep the codon stop in the coordinates  
-**--predictionStart=ATG** : Codons starts must be ATG  
+**--stopCodonExcludedFromCDS=False** : keep the codon stop in the coordinates  
+**--predictionStart=ATG** : codons starts must be ATG  
 
 ## 2.4 INSTALL FUNANNOTATE 
 ```
@@ -166,7 +166,7 @@ cd-hit-2d -i glimmer/cluster_prot100_glimmer -i2 Proteomes_E.cuniculi.txt -d 0 -
 **cd-hit-2d** : clusterise 2 fasta files (amino acid)  
 **-i** : first file (consider as the database, we clusterise on it)  
 **-i2** : second file (The one that will be clustered on the first file)  
-**-d 0** : Keep the full name of the contigs  
+**-d 0** : keep the full name of the contigs  
 **-c** : sequence identity threshold (default 0.9)
 **-A** : minimal alignment coverage control for the both sequences
 
