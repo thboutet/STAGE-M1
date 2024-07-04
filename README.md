@@ -1,7 +1,7 @@
 # STAGE-M1 : Use of gene prediction tools for microsporidian genomes
 
-This github includes all the files,scripts and results generated during my M1 internship at the LMGE.
-The aim of this internship was to try to optimize the Microannot tool by comparing different tools for gene prediction.
+This github includes all the files, scripts and results generated during my M1 internship at the LMGE.
+The aim of this internship was to try to optimize Microannot by comparing different tools for gene prediction.
 Here we have 4: Glimmer and prodigal for prokaryotic organisms, and Augustus and Funannotate which are made for eukaryotic organisms.  
 I will use these tools on 5 microsporidia : _Encephalitozoon cuniculi_, _Nosema ceranae_, _Enterocytozoon bieneusi_ , _Anncaliia algerae_ and _Nematocida parisii_.
 
