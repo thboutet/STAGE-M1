@@ -107,8 +107,8 @@ You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/scr
 augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromCDS=False --predictionStart=ATG genome_complet/E_cuniculi.fna > augustus/result_E.cuniculi_augustus.gff
 ```
 **--species** : reuse the species create with autoAugTrain.pl  
-**--introns=off** : disable intron prediction  
-**--stopCodonExcludedFromCDS=False** : keep the codon stop in the coordinates  
+**--introns=off** : disable introns prediction
+**--stopCodonExcludedFromCDS=False** : keep the codon stop in the coordinates, this option is need for run funannotate after
 **--predictionStart=ATG** : codons starts must be ATG  
 
 ## 2.4 INSTALL FUNANNOTATE 
@@ -138,8 +138,14 @@ gtf2gff3 --cfg augustus/result_E.cuniculi_augustus.gff augustus/result_E.cunicul
 
 ### 2.4.3 RUN FUNANNOTATE
 ```
-./funannotate-docker predict -i genome_complet/E_cuniculi.fna -o funannotate -s "E.cuniculi" --augustus_gff augustus/cuniculi_out.gff3 --max_intronlen 0 --cpus 8
+./funannotate-docker predict -i genome_complet/E_cuniculi.fna -o funannotate -s "E.cuniculi" --augustus_gff augustus/cuniculi_out.gff3 --max_intronlen 0 
 ```
+**-i** : input genome file
+**-o** : create an output repertory
+**-s** : name of the species
+**--augustus_gff** : Pre-computed AUGUSTUS GFF3 results for this species (must use --stopCodonExcludedFromCDS=False)
+**--max_intronlen 0** : Disable intron prediction
+
 # STEP 3: Obtain the files containing the CDS predicted by each tool for each microsporidia
 
 For this step I use the **script_gene.py** which will allow me to generate 2 files: 1 containing the CDS in nucleotide "microsporidia_CDS_tools" and the CDS in aa "Proteomes_microsporidia_tools"
