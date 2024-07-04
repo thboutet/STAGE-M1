@@ -217,7 +217,7 @@ This will create "result_microsporidia" repertories which contain :
 <img src="https://github.com/thboutet/STAGE-M1/assets/174331140/70cd21e9-cda1-4b99-a682-259f12f06e96" width=75% height=75% >
 </p>
 
- - Two bar charts of errors made in gene prediction,  100% standardized ('Bar/microsporidia100%.png') and number of errors (**'Bar/microsporidia.png'**) :
+ - Two bar charts of errors made in gene prediction,  100% standardized (**'Bar/microsporidia100%.png'**) and number of errors (**'Bar/microsporidia.png'**) :
 
 <p align="center">
 
