@@ -46,8 +46,8 @@ build-icm icm_file < data_training_glimmer_sur_e_cuniculi.fa
 ```
 glimmer3 -g 240 --start_codons atg genome_complet/E_cuniculi.fna icm_file glimmer/result_E.cuniculi
 ```
--g 240 : predict gene length > 240 nt  
---start_codons atg : Codons starts must be ATG
+**-g 240** : predict gene length > 240 nt  
+**--start_codons atg** : Codons starts must be ATG
 
 ### 2.1.4 CONVERT TO GFF 
 Here I use the script **"glimmer/Script_gff.py"** on the output ('glimmer/result_E.cuniculi.predict') to get a gff file.
@@ -61,13 +61,16 @@ conda install prodigal
 ```
 prodigal -i data_training_glimmer_sur_e_cuniculi.fa -t data_training_glimmer_sur_e_cuniculi.trn -p single 
 ```
+**-i** : input training file
+**-t** : name the training file to use with prodigal
+
 ### 2.2.3 RUN PRODIGAL 
 ```
 prodigal -i genome_complet/E_cuniculi.fna -t data_training_glimmer_sur_e_cuniculi.trn -f gff > prodigal/result_E.cuniculi
 ```
--i : input genome file
--t : input training file
--f : format of output (gff)
+**-i** : input genome file
+**-t** : input training file
+**-f** : format of output (gff)
 
 > [!IMPORTANT]
 > Prodigal does not allow to choose the size of the genes so I will treat the results later with **"script_genes.py"**.
@@ -91,17 +94,22 @@ Then we train it :
 autoAugTrain.pl --species=microsporidie_cuniculi --genome=genome_complet/all_genome_clear_cuniculi --
 trainingset=data_training_prot_cuniculi  
 ```
---species : name of the new species
---genome : input genome file
---trainingset : input training file 
+**--species** : name of the new species
+**--genome** : input genome file
+**--trainingset** : input training file 
 
 > [!IMPORTANT]
 > The data training is different, I used the **"script.aa.py"** in order to create a data training file with amino acid from the nucleotide base file.
 You can see the script [here](https://github.com/thboutet/STAGE-M1/blob/main/script_aa.py).
+
 ### 2.3.3 RUN AUGUSTUS 
 ```
 augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromCDS=False --predictionStart=ATG genome_complet/E_cuniculi.fna > augustus/result_E.cuniculi_augustus.gff
 ```
+**--species** : reuse the species create with autoAugTrain.pl
+**--introns=off** : disable intron prediction
+**--stopCodonExcludedFromCDS=False** : Keep the codon stop in the coordinates 
+**--predictionStart=ATG** : Codons starts must be ATG
 
 ## 2.4 INSTALL FUNANNOTATE 
 ```
@@ -114,6 +122,7 @@ chmod +x funannotate-docker
 ```
 ./funannotate-docker setup -d db/           
 ```
+**-d** : import funannotate database 
 ```
 nano ~/.bashrc  
 export FUNANNOTATE_DB=/home/path/to/db
@@ -154,6 +163,13 @@ Cluster 2 : unclusterized genes from cluster 1 VS database
 ```
 cd-hit-2d -i glimmer/cluster_prot100_glimmer -i2 Proteomes_E.cuniculi.txt -d 0 -o glimmer/cluster_supprot100_glimmer -c 0.9 
 ```
+**cd-hit-2d** : clusterise 2 fasta files (amino acid)  
+**-i** : first file (consider as the database, we clusterise on it)  
+**-i2** : second file (The one that will be clustered on the first file)  
+**-d 0** : Keep the full name of the contigs  
+**-c** : sequence identity threshold (default 0.9)
+**-A** : minimal alignment coverage control for the both sequences
+
 > [!NOTE]
 > Doing this two clusters allows to really find all the genes that need to be clustered.
 
