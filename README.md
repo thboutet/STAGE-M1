@@ -108,7 +108,7 @@ augustus --species=microsporidie_cuniculi --introns=off --stopCodonExcludedFromC
 ```
 **--species** : reuse the species create with autoAugTrain.pl  
 **--introns=off** : disable introns prediction
-**--stopCodonExcludedFromCDS=False** : keep the codon stop in the coordinates, this option is need for run funannotate after
+**--stopCodonExcludedFromCDS=False** : keep the codon stop in the coordinates, this option is need for run funannotate  
 **--predictionStart=ATG** : codons starts must be ATG  
 
 ## 2.4 INSTALL FUNANNOTATE 
